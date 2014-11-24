@@ -1,0 +1,18 @@
+#targets
+app:${APP_ATRGETS}
+	
+test:${TEST_ATRGETS}
+	
+cleanapp:
+	${RM} -rf ${APP_TARGETS}
+
+cleantest:
+	${RM} -rf ${TEST_TARGETS}
+
+clean:
+	${RM} -rf *.o *~
+	
+cleanall: clean cleanapp cleantest
+	
+
+			
