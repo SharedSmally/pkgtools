@@ -1,7 +1,7 @@
 #targets
-app:${APP_ATRGETS}
+app:${APP_TARGETS}
 	
-test:${TEST_ATRGETS}
+test:${TEST_TARGETS}
 	
 cleanapp:
 	${RM} -rf ${APP_TARGETS}
@@ -13,6 +13,26 @@ clean:
 	${RM} -rf *.o *~
 	
 cleanall: clean cleanapp cleantest
-	
 
+runtest:
+	@for testapp in ${TEST_TARGETS}; do \
+		echo "*******   Running test $${testapp} ......"; ./$${testapp}; sleep 2; \
+	done	
+
+###########################
+print:
+	@echo "cc sources:"
+	@echo "   ${CC_SRCS}"
+	@echo "cc obj sources:"
+	@echo "   ${CC_OBJ_SRCS}"
+	@echo "objects:"
+	@echo "   ${CC_OBJS}"
+	@echo "test sources:"
+	@echo "   ${TEST_CC_SRCS}"
+	@echo "test targets:"
+	@echo "   ${TEST_TARGETS}"
+	@echo "app sources:"
+	@echo "   ${APP_CC_SRCS}"
+	@echo "app targets:"
+	@echo "   ${APP_TARGETS}"
 			

@@ -1,0 +1,8 @@
+# makefile to generate tests: testXXX.cc->testXXX
+include ${PKGTOOLS_HOME}/mfile/makefile._vars
+include ${PKGTOOLS_HOME}/mfile/makefile.std
+
+main:test
+
+include ${PKGTOOLS_HOME}/mfile/makefile._targets		
+	

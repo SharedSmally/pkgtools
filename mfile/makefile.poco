@@ -1,1 +1,89 @@
-#included to generate applications
+############################################
+# package related variables:
+# XXX_HOME: home dir for package installed
+# XXX_INC_HOME: home dir for included headers
+# XXX_LIB_HOME: home dir for included libraries
+#
+POCO_HOME=/usr
+INC_HOME=${POCO_HOME}/include
+LIB_HOME=${POCO_HOME}/lib
+############################################
+
+############################################
+#Poco libraries: /usr/lib
+#Poco base:/usr/include/Poco; $POCO/Util
+POCO_BASE_LIBS = -lPocoFoundation -lPocoUtil
+
+#Poco Xml: depends on expat; $POCO/XML
+POCO_XML_LIBS = -lexpat -lPocoXml
+
+#Poco Crypto: depends on crypto: $POCO/Crypto
+POCO_CRYPTO_LIBS = -lcrypto -lPocoCrypto
+
+#Poco Net: depends on openssl: $POCO/Net
+POCO_NET_LIBS = -lssl -lPocoNet -lPocoNetSSL
+
+#Poco DATA ODBC: depends on unixODBC:$POCO/Data[/ODBC]
+POCO_ODBC_LIBS = -lunixODBC -lPocoData -lPocoDataODBC
+
+#Poco Data Sqlite3: depends sqlite3:$POCO/Data[/SQLite]
+POCO_SQLITE_LIBS = -lsqlite3 -lPocoData -lPocoDataSQLite
+
+#Poco Data MySQL : depends mysql:$POCO/Data[/MySQL]
+POCO_MYSQL_LIBS = -lmysql -lPocoData -lPocoMySQL
+
+#Poco Zip: depends on zip
+POCO_ZIP_LIBS = -lzip -lPocoZip
+
+############################################
+#common flags:
+##############
+#add include paths: -I${include_dirs}
+#CPPFLAGS += -fpermissive
+
+##############
+#extra flags for c compile ${CC}
+#CFLAGS +=
+ifneq ($(INC_HOME),/usr/include)
+ifneq ($(INC_HOME),/include)
+CFLAGS += ${INC_HOME}
+endif
+endif
+
+##############
+#extra flags for cxx compile ${CXX}
+#CXXFLAGS += std=c++0x
+ifneq ($(INC_HOME),/usr/include)
+ifneq ($(INC_HOME),/include)
+CXXFLAGS += ${INC_HOME}
+endif
+endif
+
+##############
+#add library paths: -L${library_dirs}
+#LDFLAGS +=
+ifneq ($(LIB_HOME),/usr/lib)
+ifneq ($(LIB_HOME),/lib)
+LDFLAGS += ${LIB_HOME}
+endif
+endif
+
+############################################
+#add libraries: -l${library}
+LDLIBS += ${POCO_BASE_LIBS}
+LDLIBS += ${POCO_NET}
+LDLIBS += ${POCO_XML}
+LDLIBS += ${POCO_DATA}
+############################################
+
+################################
+ifdef POCO_SQLITE
+LDLIBS += ${POCO_DATA_SQLITE}
+else
+ifdef POCO_ODBC
+LDLIBS += ${POCO_DATA_ODBC}
+else
+LDLIBS += ${POCO_DATA_ODBC} ${POCO_DATA_SQLITE}
+endif
+endif
+################################

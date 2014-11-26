@@ -1,3 +1,25 @@
+###########################
+#various targets:
+###########################
 
+###########################
+#all *.cc files
+CC_SRCS=$(wildcard *.cc)
+#all test*.cc files
+TEST_CC_SRCS=$(wildcard test*.cc)
+#all mainXXX.cc files
+APP_CC_SRCS=$(wildcard main*.cc)
+
+###########################
+#test*.cc files
+TEST_TARGETS=$(patsubst %.cc,%,${TEST_CC_SRCS})
+APP_TARGETS=$(patsubst %.cc,%,${APP_CC_SRCS})
+
+###########################
+#objects
+CC_OBJ_SRCS=$(filter-out ${TEST_CC_SRCS},${CC_SRCS})
+CC_OBJS=$(patsubst %.cc,%.o,${CC_OBJ_SRCS})
+
+###########################
 	
 	 
