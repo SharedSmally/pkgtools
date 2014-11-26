@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<schema targetNamespace="http://www.cpw.com/cls" elementFormDefault="qualified" xmlns="http://www.w3.org/2001/XMLSchema" xmlns:cpw="http://www.cpw.com/cls">
+
+    <simpleType name="AccessType">
+    	<restriction base="string">
+    		<enumeration value="public"></enumeration>
+    		<enumeration value="protected"></enumeration>
+    		<enumeration value="private"></enumeration>
+    		<enumeration value="value"></enumeration>
+    	</restriction>
+    </simpleType>
+
+    <simpleType name="VisibilityType">
+    	<restriction base="string">
+    		<enumeration value="getter"></enumeration>
+    		<enumeration value="setter"></enumeration>
+    		<enumeration value="getter-setter"></enumeration>
+    	</restriction>
+    </simpleType>
+
+    <complexType name="NamedType">
+        <annotation>
+        	<documentation>One name</documentation>
+        </annotation>
+        <attribute name="name" type="string"></attribute>
+    </complexType>
+
+    <simpleType name="VersionType">
+    	<restriction base="string">
+    		<pattern value="\d.\d.\d"></pattern>
+    	</restriction>
+    </simpleType>
+
+    <complexType name="incType">
+    	<attribute name="system" type="boolean"></attribute>
+    	<attribute name="redefine" type="boolean"></attribute>
+    	<attribute name="namespace" type="string"></attribute>
+    	<attribute name="prefix" type="string"></attribute>
+    	<attribute name="suffix" type="string"></attribute>
+    </complexType>
+
+    <complexType name="NamesType" mixed="true">
+    	<annotation>
+    		<documentation>A list of names with common prefix and suffix. The real names are ${prefix}${name}${suffix}.</documentation>
+    	</annotation></complexType>
+
+    <complexType name="typeType"></complexType>
+
+    <complexType name="TemplateType"></complexType>
+</schema>

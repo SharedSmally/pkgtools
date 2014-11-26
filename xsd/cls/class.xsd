@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<schema targetNamespace="http://www.cpw.com/cls"
+	elementFormDefault="qualified" xmlns="http://www.w3.org/2001/XMLSchema"
+	xmlns:cpw="http://www.cpw.com/cls">
+
+	<include schemaLocation="common.xsd"></include>
+	<complexType name="classType"></complexType>
+
+	<complexType name="argType"></complexType>
+
+	<complexType name="retType">
+		<sequence>
+			<element name="NewElement" type="string"></element>
+		</sequence>
+	</complexType>
+
+	<complexType name="methodType"></complexType>
+
+	<complexType name="funcType"></complexType>
+
+	<complexType name="typedefType">
+        <annotation>
+        	<documentation>typedef ${typename} ${type} ${name};</documentation>
+        </annotation>
+        <sequence>
+			<element name="type" type="string"></element>
+        </sequence>
+		<attribute name="typename" type="boolean"></attribute>
+        <attribute name="type" type="string"></attribute>
+        <attribute name="name" type="string"></attribute>
+	</complexType>
+
+	<complexType name="macroType"></complexType>
+
+	<complexType name="cfuncType"></complexType>
+
+	<complexType name="friendType"></complexType>
+
+	<complexType name="usingType"></complexType>
+
+	<complexType name="cfileType">
+		<sequence>
+			<element name="h" type="cpw:incType" minOccurs="0"
+				maxOccurs="unbounded">
+			</element>
+			<element name="macro" type="cpw:macroType" minOccurs="0" maxOccurs="unbounded"></element>
+			<element name="typedef" type="cpw:typedefType" minOccurs="0" maxOccurs="unbounded"></element>
+			<element name="enum" type="cpw:enumType" minOccurs="0" maxOccurs="unbounded"></element>
+			<element name="union" type="cpw:unionType" minOccurs="0"
+				maxOccurs="unbounded">
+			</element>
+			<element name="func" type="cpw:funcType" minOccurs="0" maxOccurs="unbounded">
+			</element>
+            <element name="cfunc" type="cpw:cfuncType" minOccurs="0" maxOccurs="unbounded">
+			</element>
+            <element name="struct" type="cpw:classType" minOccurs="0" maxOccurs="unbounded">
+			</element>
+            <element name="class" type="cpw:classType" minOccurs="0" maxOccurs="unbounded">
+			</element>
+        </sequence>
+		<attribute name="namespace" type="string"></attribute>
+	</complexType>
+
+	<element name="cfile" type="cpw:cfileType">
+		<annotation>
+			<documentation>generate one *.h(*.cc) file.</documentation>
+		</annotation>
+	</element>
+
+    <complexType name="enumType"></complexType>
+
+    <complexType name="unionType"></complexType>
+</schema>
