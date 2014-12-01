@@ -1,0 +1,181 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<schema targetNamespace="http://www.cpw.com/pkg/" xmlns="http://www.w3.org/2001/XMLSchema" xmlns:cpw="http://www.cpw.com/pkg/">
+    <element name="cfile" type="cpw:CFileType"></element>
+    
+    <complexType name="CFileType">
+    	<sequence>
+    		<element name="himport" type="cpw:ImportType" minOccurs="0"
+    			maxOccurs="unbounded">
+    		</element>
+    		<element name="cimport" type="cpw:ImportType" minOccurs="0"
+    			maxOccurs="unbounded">
+    		</element>
+    		<element name="decl" type="cpw:DeclType" minOccurs="0"
+    			maxOccurs="unbounded">
+    		</element>
+    		<element name="using" type="cpw:UsingType" minOccurs="0"
+    			maxOccurs="unbounded">
+    		</element>
+    		<element name="typedef" type="cpw:TypedefType" minOccurs="0"
+    			maxOccurs="unbounded">
+    		</element>
+    		<element name="define" type="cpw:DefineType" minOccurs="0"
+    			maxOccurs="unbounded">
+    		</element>
+    		<element name="cfunc" type="cpw:FunctionType" minOccurs="0"
+    			maxOccurs="unbounded">
+    		</element>
+    		<element name="cfunction" type="cpw:FunctionType"
+    			minOccurs="0" maxOccurs="unbounded">
+    		</element>
+    		<element name="func" type="cpw:FunctionType" minOccurs="0"
+    			maxOccurs="unbounded">
+    		</element>
+    		<element name="function" type="cpw:FunctionType"
+    			minOccurs="0" maxOccurs="unbounded">
+    		</element>
+    		<element name="const" type="cpw:ConstType" minOccurs="0"
+    			maxOccurs="unbounded">
+    		</element>
+    		<element name="var" type="cpw:VarType" minOccurs="0"
+    			maxOccurs="unbounded">
+    		</element>
+    		<element name="class" type="cpw:ClassType" minOccurs="0"
+    			maxOccurs="unbounded">
+    		</element>
+			<element name="struct" type="cpw:ClassType" minOccurs="0"
+    			maxOccurs="unbounded">
+    		</element>
+    		<element name="enum" type="cpw:EnumType" minOccurs="0"
+    			maxOccurs="unbounded">
+    		</element>
+    		<element name="union" type="cpw:UnionType" minOccurs="0"
+    			maxOccurs="unbounded">
+    		</element>
+    	</sequence>
+    	<attribute name="name" type="string"></attribute>
+    	<attribute name="extension" type="boolean"></attribute>
+    	<attribute name="extC" type="boolean"></attribute>
+
+    	<attribute name="suffix" type="string"></attribute>
+    </complexType>
+
+    <complexType name="ClassType">
+    	<sequence>
+    		<element name="template" type="cpw:TemplateType"></element>
+    		<element name="templatetype" type="cpw:TemplateTypeType"></element>
+    		<element name="parent" type="cpw:ParentClassType"></element>
+    		<element name="interface" type="cpw:InterfaceType"></element>
+    		<element name="method" type="cpw:MethodType"></element>
+    	</sequence>
+    	<attribute name="name" type="string"></attribute>
+    	<attribute name="templates" type="string"></attribute>
+    	<attribute name="templatetypes" type="string"></attribute>
+    	<attribute name="parents" type="string"></attribute>
+    	<attribute name="interfaces" type="string"></attribute>
+    	<attribute name="struct" type="boolean"></attribute>
+    </complexType>
+
+    <complexType name="ImportType"></complexType>
+
+    <complexType name="DeclType"></complexType>
+
+    <complexType name="UsingType"></complexType>
+
+    <complexType name="TypedefType"></complexType>
+
+    <complexType name="DefineType"></complexType>
+
+    <complexType name="FunctionType">
+    	<sequence>
+    		<element name="tmplate" type="string"></element>
+    		<element name="return" type="string"></element>
+            <element name="templatetype" type="string"></element>
+            <element name="arg" type="cpw:ArgType"></element>
+    	</sequence>
+    	<attribute name="name" type="string"></attribute>
+    	<attribute name="templates" type="string"></attribute>
+    	<attribute name="return" type="string"></attribute>
+        <attribute name="templatetypes" type="string"></attribute>
+        <attribute name="args" type="string"></attribute>
+    </complexType>
+
+    <complexType name="ConstType"></complexType>
+
+    <complexType name="VarType"></complexType>
+
+    <complexType name="EnumType"></complexType>
+
+    <complexType name="UnionType"></complexType>
+
+    <complexType name="TemplateType"></complexType>
+
+    <complexType name="TemplateTypeType"></complexType>
+
+    <complexType name="ParentClassType"></complexType>
+
+    <complexType name="InterfaceType"></complexType>
+
+    <simpleType name="AccessType">
+    	<restriction base="string">
+    		<enumeration value="public"></enumeration>
+    		<enumeration value="protected"></enumeration>
+    		<enumeration value="private"></enumeration>
+    		<enumeration value="none"></enumeration>
+    	</restriction>
+    </simpleType>
+    
+    <simpleType name="VirtualType">
+    	<restriction base="string">
+    		<enumeration value="true"></enumeration>
+    		<enumeration value="false"></enumeration>
+    		<enumeration value="pure"></enumeration>
+    	</restriction>
+    </simpleType>
+
+    <complexType name="TypeType">
+    	<sequence>
+    		<element name="template" type="cpw:TypeType"></element>
+    	</sequence>
+    	<attribute name="name" type="string"></attribute>
+    	<attribute name="class" type="string"></attribute>
+    	<attribute name="templates" type="string"></attribute>
+    	<attribute name="typedef" type="string"></attribute>
+    </complexType>
+
+
+    <complexType name="ArgType">
+    	<complexContent>
+    		<extension base="cpw:TypeType">
+    			<sequence>
+    				<element name="default" type="string"></element>
+    			</sequence>
+    			<attribute name="name" type="string"></attribute>
+    			<attribute name="const" type="boolean"></attribute>
+    			<attribute name="ref" type="string"></attribute>
+    			<attribute name="default" type="string"></attribute>
+    		</extension>
+    	</complexContent>
+    </complexType>
+
+    <complexType name="MethodType">
+    	<complexContent>
+    		<extension base="cpw:FunctionType">
+    			<attribute name="virtual" type="cpw:VirtualType"></attribute>
+    			<attribute name="access" type="cpw:AccessType"></attribute>
+    		</extension>
+    	</complexContent>
+    </complexType>
+
+    <complexType name="ConstructorType">
+    	<sequence>
+    		<element name="template" type="cpw:TemplateType" maxOccurs="unbounded" minOccurs="0"></element>
+    		<element name="arg" type="cpw:ArgType" maxOccurs="unbounded" minOccurs="0"></element>
+    	</sequence>
+    	<attribute name="access" type="cpw:AccessType"></attribute>
+    	<attribute name="templates" type="string"></attribute>
+    	<attribute name="pre_init" type="string"></attribute>
+    	<attribute name="init" type="string"></attribute>
+    	<attribute name="post_init" type="string"></attribute>
+    </complexType>
+</schema>

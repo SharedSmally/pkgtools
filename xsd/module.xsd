@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<schema targetNamespace="http://www.cpw.com/pkg"
+	xmlns="http://www.w3.org/2001/XMLSchema"
+	xmlns:cpw="http://www.cpw.com/pkg">
+
+	<include schemaLocation="common.xsd"></include>
+	<element name="module" type="cpw:ModuleType"></element>
+
+	<complexType name="ModuleType">
+		<complexContent>
+			<extension base="cpw:ComponentType">
+
+				<sequence>
+					<element name="class" type="cpw:CFileType" maxOccurs="unbounded" minOccurs="0"></element>
+					<element name="interface" type="cpw:CFileType" maxOccurs="unbounded" minOccurs="0"></element>
+				</sequence>
+
+				<attribute name="libname" type="string"></attribute>
+
+
+				<attribute name="name" type="string"></attribute>
+
+
+			</extension>
+		</complexContent>
+	</complexType>
+
+	<complexType name="ImportType">
+		<sequence>
+			<element name="include" type="string">
+				<annotation>
+					<documentation>-I$PATH/$elem</documentation>
+				</annotation>
+			</element>
+			<element name="library" type="string">
+				<annotation>
+					<documentation>
+						for the flags: -L$PATH -l$elems
+					</documentation>
+				</annotation>
+			</element>
+		</sequence>
+		<attribute name="name" type="ID"></attribute>
+		<attribute name="namespace" type="string"></attribute>
+		<attribute name="redefine" type="boolean"></attribute>
+		<attribute name="system" type="boolean"></attribute>
+		<attribute name="prefix" type="string"></attribute>
+		<attribute name="suffix" type="string"></attribute>
+	</complexType>
+
+
+	<complexType name="CFileType" mixed="true">
+		<attribute name="file" type="string"></attribute>
+	</complexType>
+</schema>

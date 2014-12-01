@@ -1,0 +1,52 @@
+<?xml version="1.0"?>
+<!-- 
+   package layout descriptor: relative to package home directory 
+   basic layout:
+      bin/: applications and scripts
+      lib/: all libraries
+      include/: header files for SDK
+      man/: manual
+      doc/: 
+          pdf|html manual
+      cfg/: configurations
+
+      meta/
+         pkg/package.xml;layout.xml;product.xml;
+             autogen.xml;debian.xml;rpm.xml;tar.xml;...
+         mibs/
+      data/
+      build/
+         target*/
+      src/
+         script/scriptsn
+         app/appn
+         lib/libn
+         lib/libn/modm
+         svc/svcn
+         svc/svcn/modm
+         db/dbn
+         msg/protocol_msgn
+         ipc/ipc_msgn
+         xsd/xsdn
+         rec/recn
+         rpt/rptn
+
+         utest/: auto-generated unit test 
+         tests/: specific test
+-->
+<layout>
+    <!--  list-of-dirs $homedir/${prefix}file${suffix} with $mode -->
+    <dirset homedir="" prefix="" suffix="" mode="">list-of-dirs</dirset>
+    
+    <!--  list-of-files $homedir/${prefix}file${suffix} with $mode -->
+    <fileset homedir="" prefix="" suffix="" mode="">list-of-files</fileset>
+
+    <!-- a file under a list-of-dirs: $homedir/${prefix}file${suffix}/$file with $mode -->
+    <filedirset homedir="" prefix="" suffix="" file="" mode="">list-of-dirs</filedirset>
+    
+    <!-- link a list-of-files using ln -s -->
+    <link desc="" src=""></link>
+    
+    <!--  copy a list-of-files using cp -->
+    <copy></copy>
+</layout>

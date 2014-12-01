@@ -1,0 +1,131 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<schema targetNamespace="http://www.cpw.com/pkg" xmlns="http://www.w3.org/2001/XMLSchema" xmlns:cpw="http://www.cpw.com/pkg">
+    <simpleType name="version-type">
+        <annotation>
+        	<documentation>version of major.minor.revision.</documentation>
+        </annotation>
+        <restriction base="string">
+    		<pattern value="(\d+.){2}\d+"></pattern>
+    	</restriction>
+    </simpleType>
+
+    <complexType name="VersionedObjType">
+    	<complexContent>
+    		<extension base="cpw:NamedObjType">
+    			<attribute name="version" type="cpw:version-type" use="required"></attribute>
+    		</extension>
+    	</complexContent>
+    </complexType>
+    
+    <complexType name="NamedObjType">
+    	<sequence>
+    		<element name="description" type="string"></element>
+    	</sequence>
+    	<attribute name="name" type="string" use="required"></attribute>
+    	<attribute name="desc" type="string" use="optional"></attribute>
+    </complexType>
+
+    <complexType name="ArgObjType">
+    	<complexContent>
+    		<extension base="cpw:NamedObjType">
+    			<attribute name="type" type="string" use="required"></attribute>
+    			<attribute name="const" type="boolean"></attribute>
+    			<attribute name="ref" type="boolean"></attribute>
+    			<attribute name="value" type="string"></attribute>
+    		</extension>
+    	</complexContent>
+    </complexType>
+    
+    <complexType name="TypeObjType"></complexType>
+
+    <complexType name="ConfigType">
+    	<complexContent>
+    		<extension base="cpw:ArgObjType">
+    			<attribute name="alias" type="string"></attribute>
+    		</extension>
+    	</complexContent>
+    </complexType>
+
+    <complexType name="CountType"></complexType>
+
+    <complexType name="MetricType"></complexType>
+
+    <simpleType name="visibility-type">
+    	<restriction base="string">
+    		<enumeration value="public"></enumeration>
+    		<enumeration value="protected"></enumeration>
+    		<enumeration value="private"></enumeration>
+    		<enumeration value="none"></enumeration>
+    	</restriction>
+    </simpleType>
+
+    <simpleType name="virtualfn-type">
+    	<restriction base="string">
+    		<enumeration value="true"></enumeration>
+    		<enumeration value="false"></enumeration>
+    		<enumeration value="pure"></enumeration>
+    	</restriction>
+    </simpleType>
+
+    <complexType name="LibraryType">
+    	<sequence>
+    		<element name="module" type="cpw:ModuleType" minOccurs="1" maxOccurs="unbounded"></element>
+    	</sequence>
+    	<attribute name="name" type="string" use="required"></attribute>
+    	<attribute name="version" type="string" use="optional"></attribute>
+    	<attribute name="basespace" type="string"></attribute>
+    	<attribute name="basedir" type="string"></attribute>
+    </complexType>
+
+    <complexType name="FlagType">
+    	<attribute name="name" type="string"></attribute>
+    	<attribute name="value" type="string"></attribute>
+    	<attribute name="target" type="string"></attribute>
+    	<attribute name="append" type="boolean"></attribute>
+    </complexType>
+
+    <complexType name="ModuleType" mixed="true">
+    	<attribute name="subspace" type="string"></attribute>
+    	<attribute name="subdir" type="string"></attribute>
+    </complexType>
+
+    <complexType name="IncLibFlagsType" mixed="true">
+    	<annotation>
+    		<documentation>
+    			flags for CPPFLAGS +=-I${PATH}
+    		</documentation>
+    	</annotation>
+    	<attribute name="prefix" type="string"></attribute>
+    	<attribute name="suffix" type="string"></attribute>
+    	<attribute name="append" type="boolean"></attribute>
+    </complexType>
+
+    <complexType name="ComponentType">
+    	<sequence>
+    		<element name="incpath" type="cpw:IncLibFlagsType"
+    			maxOccurs="unbounded" minOccurs="0">
+    		</element>
+    		<element name="libpath" type="cpw:IncLibFlagsType"
+    			maxOccurs="unbounded" minOccurs="0">
+    		</element>
+    		<element name="library" type="cpw:IncLibFlagsType"
+    			maxOccurs="unbounded" minOccurs="0">
+    		</element>
+    		<element name="flags" type="cpw:ComponentFlagsType" maxOccurs="unbounded" minOccurs="0"></element>
+    		<element name="flag" type="cpw:ComponentFlagsType" maxOccurs="unbounded" minOccurs="0"></element>
+    	</sequence>
+    	<attribute name="pkgname" type="string"></attribute>
+    	<attribute name="namespace" type="string"></attribute>
+
+    </complexType>
+    
+
+
+    <complexType name="ComponentFlagsType" mixed="true">
+    	<attribute name="name" type="string"></attribute>
+    	<attribute name="prefix" type="string"></attribute>
+    	<attribute name="suffix" type="string"></attribute>
+    	<attribute name="append" type="boolean"></attribute>
+    </complexType>
+
+</schema>

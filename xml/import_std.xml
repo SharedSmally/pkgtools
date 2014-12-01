@@ -1,0 +1,7 @@
+<repository>
+   <module name="c" redefine="true" namespace="stdc" suffix=".h"/>
+   <module name="cxx" redefine="true" namespace="stdcxx"/>
+   <module name="unix" redefine="true" namespace="stdunix" suffix=".h"/>
+   <module name="unix_sys" redefine="true" namespace="stdunix" prefix="sys/" suffix=".h"/>
+</repository>
+

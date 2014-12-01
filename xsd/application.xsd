@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<schema targetNamespace="http://www.cpw.com/pkg"
+	xmlns="http://www.w3.org/2001/XMLSchema"
+	xmlns:cpw="http://www.cpw.com/pkg">
+	<include schemaLocation="common.xsd"></include>
+	<complexType name="ApplicationType">
+		<complexContent>
+			<extension base="cpw:VersionedObj-Type">
+				<sequence>
+					<element name="arg" type="cpw:CommandLineArgType"
+						maxOccurs="unbounded" minOccurs="0">
+					</element>
+					<element name="env" type="cpw:EnvironType"
+						maxOccurs="unbounded" minOccurs="0">
+					</element>
+					<element name="library" type="string"
+						maxOccurs="unbounded" minOccurs="0">
+					</element>
+					<element name="flag" type="string" maxOccurs="unbounded" minOccurs="0"></element>
+				</sequence>
+				<attribute name="env" type="boolean"></attribute>
+				<attribute name="mainClass" type="string"></attribute>
+			</extension>
+		</complexContent>
+	</complexType>
+
+	<element name="application" type="cpw:ApplicationType"></element>
+
+    <complexType name="CommandLineArgType"></complexType>
+
+    <complexType name="EnvironType">
+    	<attribute name="name" type="string"></attribute>
+    	<attribute name="value" type="string"></attribute>
+    	<attribute name="add" type="boolean"></attribute>
+    </complexType>
+</schema>

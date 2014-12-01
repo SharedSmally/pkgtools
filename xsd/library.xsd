@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<schema targetNamespace="http://www.cpw.com/pkg" xmlns="http://www.w3.org/2001/XMLSchema" xmlns:cpw="http://www.cpw.com/pkg">
+	<include schemaLocation="common.xsd"></include>
+
+	<element name="library" type="cpw:LibraryType"></element>
+
+	<complexType name="LibraryType">
+		<complexContent>
+			<extension base="cpw:VersionedObjType">
+				<sequence>
+					<element name="module" type="cpw:ModuleDescType" maxOccurs="unbounded" minOccurs="1"></element>
+				</sequence>
+			</extension>
+		</complexContent>
+	</complexType>
+
+	<complexType name="ModuleDescType">
+		<sequence>
+			<element name="import" type="string" maxOccurs="unbounded" minOccurs="0"></element>
+            <element name="flag" type="string" maxOccurs="unbounded" minOccurs="0"></element>
+            <element name="cfile" type="string" maxOccurs="unbounded"
+				minOccurs="1">
+			</element>
+		</sequence>
+		<attribute name="name" type="string"></attribute>
+		<attribute name="namespace" type="string"></attribute>
+	</complexType>
+</schema>

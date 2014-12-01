@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<schema targetNamespace="http://www.cpw.com/pkg" elementFormDefault="qualified" xmlns="http://www.w3.org/2001/XMLSchema" xmlns:pkg="http://www.cpw.com/pkg">
+
+    <complexType name="TypeType">
+    	<sequence>
+    		<element name="template" type="pkg:TypeType"
+    			maxOccurs="unbounded" minOccurs="0">
+    		</element>
+    	</sequence>
+    	<attribute name="typename" type="string"></attribute>
+    	<attribute name="prefix" type="string"></attribute>
+        <attribute name="type" type="string"></attribute>
+        <attribute name="class" type="string"></attribute>
+    	<attribute name="template" type="string"></attribute>
+    	<attribute name="typedef" type="string"></attribute>
+    </complexType>
+
+    <complexType name="TemplateType">
+    	<sequence>
+    		<element name="default" type="pkg:TypeType"></element>
+    	</sequence>
+    	<attribute name="typename" type="string"></attribute>
+    	<attribute name="name" type="string"></attribute>
+    	<attribute name="start" type="nonNegativeInteger"></attribute>
+    	<attribute name="size" type="positiveInteger"></attribute>
+    	<attribute name="suffix" type="string"></attribute>
+    	<attribute name="default" type="string"></attribute>
+    </complexType>
+
+    <complexType name="ArgType">
+    	<complexContent>
+    		<extension base="pkg:TypeType">
+    			<sequence>
+    			</sequence>
+    			<attribute name="const" type="boolean"></attribute>
+    			<attribute name="ref" type="boolean"></attribute>
+    			<attribute name="array" type="int"></attribute>
+    		</extension>
+    	</complexContent>
+    </complexType>
+
+    <complexType name="ReturnType">
+    	<sequence>
+    		<element name="return" type="pkg:ArgType" maxOccurs="1" minOccurs="0"></element>
+    	</sequence>
+    	<attribute name="return" type="string"></attribute>
+    	<attribute name="ref" type="boolean"></attribute>
+    </complexType>
+
+    <complexType name="ArgumentType">
+    	<complexContent>
+    		<extension base="pkg:ArgType">
+    			<sequence>
+    				<element name="default" type="string"></element>
+    			</sequence>
+                <attribute name="name" type="string"></attribute>
+                <attribute name="default" type="string"></attribute>
+    		</extension>
+    	</complexContent>
+    </complexType>
+
+    <complexType name="FullTemplateType">
+    	<sequence>
+    		<element name="template" type="pkg:TemplateType"
+    			maxOccurs="unbounded" minOccurs="0">
+    		</element>
+    		<element name="templatetype" type="pkg:TypeType"
+    			maxOccurs="unbounded" minOccurs="0">
+    		</element>
+    	</sequence>
+    	<attribute name="typename" type="string"></attribute>
+    	<attribute name="template" type="string"></attribute>
+    	<attribute name="templatetype" type="string"></attribute>
+    	<attribute name="templatetypes" type="string"></attribute>
+    </complexType>
+</schema>

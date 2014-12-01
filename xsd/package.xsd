@@ -1,0 +1,85 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<schema targetNamespace="http://www.cpw.com/pkg" xmlns="http://www.w3.org/2001/XMLSchema" xmlns:cpw="http://www.cpw.com/pkg">
+	<include schemaLocation="common.xsd"></include>
+
+	<element name="package" type="cpw:PackageType"></element>
+
+	<complexType name="PackageType">
+		<complexContent>
+			<extension base="cpw:VersionedObjType">
+				<sequence>
+					<element name="import" type="cpw:ImportType"
+						minOccurs="0" maxOccurs="unbounded">
+					</element>
+					<element name="script" type="string" minOccurs="0"
+						maxOccurs="unbounded">
+					</element>
+					<element name="application" type="string"
+						maxOccurs="unbounded" minOccurs="0">
+					</element>
+					<element name="lib" type="cpw:LibType"
+						maxOccurs="unbounded" minOccurs="0">
+					</element>
+					<element name="library" type="cpw:LibraryType"
+						maxOccurs="unbounded" minOccurs="0">
+					</element>
+
+					<element name="message" type="string"
+						maxOccurs="unbounded" minOccurs="0">
+					</element>
+					<element name="protocol" type="string"
+						maxOccurs="unbounded" minOccurs="0">
+					</element>
+					<element name="database" type="string"
+						maxOccurs="unbounded" minOccurs="0">
+					</element>
+					<element name="record" type="string"
+						maxOccurs="unbounded" minOccurs="0">
+					</element>
+					<element name="files" type="string"
+						maxOccurs="unbounded" minOccurs="0">
+					</element>
+					<element name="dirs" type="string"
+						maxOccurs="unbounded" minOccurs="0">
+					</element>
+
+				</sequence>
+				<attribute name="namespace" type="string" use="optional"></attribute>
+			</extension>
+		</complexContent>
+	</complexType>
+
+	<complexType name="ImportType">
+		<attribute name="name" type="IDREF" use="required"></attribute>
+		<attribute name="version" type="string" use="optional"></attribute>
+		<attribute name="exact" type="boolean" use="optional"></attribute>
+	</complexType>
+
+	<complexType name="LibType" mixed="true">
+        <annotation>
+        	<documentation>list-of libraries without modules.</documentation>
+        </annotation>
+        <attribute name="version" type="cpw:version-type"
+			use="optional">
+		</attribute>
+		<attribute name="basespace" type="string" use="optional"></attribute>
+		<attribute name="subspace" type="string" use="optional">
+			<annotation>
+				<documentation>
+					shared ($basename::$subspace) if provided, otherwise
+					is $basespace/$libname.
+				</documentation>
+			</annotation>
+		</attribute>
+
+        <attribute name="basedir" type="string"></attribute>
+        <attribute name="subdir" type="string" use="optional">
+			<annotation>
+				<documentation>
+					shared the same subdir if provided, otherwise is
+					$basedir/$libname.
+				</documentation>
+			</annotation>
+		</attribute>
+	</complexType>
+</schema>
