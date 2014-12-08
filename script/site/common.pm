@@ -11,9 +11,11 @@ use base 'Exporter';
 
 #our @ISA = qw(Exporter);
 #################################
-our @EXPORT = qw(trim  
-     getNSDirStr getNSIncStr getNSPrefixStrs getNSSuffixStrs
+our @EXPORT = qw(
+     trim padding paddingArray
      isTrue isFalse
+     getNSDirStr getNSIncStr getNSPrefixStrs getNSSuffixStrs      
+     toDir cmdDir lsArray normalizeNS
      arrayNormStr readArray writeArray
      );
 
@@ -27,6 +29,8 @@ our @EXPORT = qw(trim
 #my @workdays = (WEEKDAYS)[1 .. 5];          # right
 use constant SPACES => "   ";
 use constant SEPERATOR => ",";
+use constant DEFAULT_LEN => 20;
+use constant DEFAULT_DELTA_LEN => 5;
 #
 #use common; #import all constants
 #my $SP3=common::SPACES;
@@ -58,6 +62,48 @@ sub rtrim {
 sub trim {
 	return ltrim(rtrim($_[0]));
 }
+sub padding {
+	my $s0 = $_[0];
+	my $suffix=(@_ >= 2) ? $_[1] : "";
+	my $len =  ( @_ >= 3 ) ? $_[2] : DEFAULT_LEN ;
+	my $mylen = $len - length($s0) - length($suffix);
+	
+	return "${s0}${suffix}" if ($mylen <= 0 );
+	return $s0 . " " x ${mylen} . ${suffix};
+}
+###########
+# padding with prefix(not for firs one) and suffix(not for last one)
+sub paddingArray {
+	my @a0=@{$_[0]};
+	my $prefix=(@_ >= 2) ? $_[1] : "";
+	my $suffix=(@_ >= 3) ? $_[2] : "";
+	my $dlen = (@_ >= 4) ? $_[3] : DEFAULT_DELTA_LEN;
+	
+	my $maxlen = 0; my $d0=0;
+	my $cnt=@a0; my $ind=1;
+	foreach my $s0 (@a0) {
+		$d0=length($s0);
+		if ($ind==1) { $d0 += length($suffix); } 
+		elsif ($ind==$cnt) { $d0 += length($prefix); }
+		else {$d0 += length($prefix)+length($suffix); }
+		$maxlen = $d0 if ($maxlen < $d0);
+		++$ind; 
+	}			
+	
+	my @array; $ind=1;
+	foreach my $s0 (@a0) {
+		if ($ind==1) {
+			push(@array, padding($s0, $suffix, $maxlen));
+		} elsif ($ind==$cnt) {
+			push(@array, padding("${prefix}${s0}", "", $maxlen));
+		} else {
+			push(@array, padding("${prefix}${s0}", $suffix, $maxlen));	
+		}		
+		++$ind; 
+	}	
+	return \@array;
+}
+
 ###############################
 sub isTrue {
 	my $v = trim($_[0]);
@@ -78,6 +124,7 @@ sub arrayNormStr {
 	$s0 =~ s/\s+/${sep}/g; $s0 =~ s/\,+/${sep}/g; $s0 =~ s/:+/${sep}/g;
 	return split($sep, $s0);
 }
+#############
 # return strings from namespace A::B::C/A.B.C
 # normalize namespace to A.B.C
 sub normalizeNS {
@@ -95,8 +142,9 @@ sub getNSDirStr {
 # return A_B_C for namespace
 sub getNSIncStr {
 	my $ns = normalizeNS($_[0]);
-	$ns =~ s/\./\_/g; 
-	return uc($ns);	
+	$ns =~ s/\./\_/g;
+	return $ns; 
+	#return uc($ns);	
 }
 sub getNSPrefixStrs {
 	my @array;
@@ -132,5 +180,25 @@ sub writeArray {
 	open(my $fh, ">$filename")  or die "Could not open file '${filename}' $!";
 	print $fh join("\n",@array);	
 	close ($fh);	
+}
+###########################################
+
+################
+sub toDir {	
+	my $dir=$_[0];
+	return "" if (length($dir)==0);
+	$dir =~ s/^\s+//; $dir =~ s/\s+$//;
+	$dir .= "/" unless ( $dir =~ /\/$/ );
+	return $dir;
+}
+sub cmdDir {
+	return toDir(`dirname $0`);
+}
+
+sub lsArray {
+	my $pattern=$_[0];
+	my $out = `ls ${pattern}`;
+	$out =~ s/\s+/ /g;
+	return split(" ", $out);
 }
 ###########################################

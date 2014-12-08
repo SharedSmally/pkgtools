@@ -1,0 +1,9 @@
+<library namespace="" name="" version="">
+   <!-- normal libraries
+   share the same namespace in module
+   <module namespace="">list-of-modules</module>
+   individual namespace for modules
+   <modules>list-of-modules</modules>
+   no module/modules: using classcfg.xml
+    -->
+</library>

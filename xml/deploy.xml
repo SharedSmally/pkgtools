@@ -1,0 +1,5 @@
+<deploy name="product" version="1.0.0">   
+   <sdk base="./" prefix="" suffix=".sh" shell="bash" mode="">install uninstall</sdk>
+   <pkg name="" version="" sdk="true">appsrc bin test libsrc lib data meta</pkg> 
+   <link base="./lib" src="/usr/lib" prefix="lib" suffix=".so">openssl crypto</link>  
+</deploy>

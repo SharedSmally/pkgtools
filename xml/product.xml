@@ -1,0 +1,4 @@
+<product name="product" version="1.0.0">   
+   <sdk>install uninstall</sdk>
+   <pkg version="2.0.0">cpw</pkg>   
+</product>

@@ -14,18 +14,18 @@ use commonClass; # genUnionCode, genClassCode
 
 my $SP3=common::SPACES;
 
-#
 # generate *.h/*.cc from meta/*.xml
-#
+
 sub generateClass {	 
 	my $root = readXmlRoot($_[0]);
+	my $incdir = $_[1];
 	my $fname=getXmlAttr($root, "file");
 	next unless ($fname);
 	print "generate class *.h/*.cc from file $_[0]\n";
 	
 	my ($s0, $node);
 	my (@harray, @hsuf, @carray);
-	 	
+	 		
 	my $ns=getXmlAttr($root, "namespace");
 	my $nsdir=getNSDirStr($ns);
 	$s0=getNSIncStr($ns); $s0 .= "_" if ($ns);
@@ -113,24 +113,26 @@ sub generateClass {
 	my $len=@carray; $num += 1;
 	writeArray("${fname}.cc", \@carray) if ($len>$num);
 
-    my $incdir="";
-    if (-d "../../include")    { $incdir="../../include/"; }
-    elsif (-d "../../include") { $incdir="../../inc/"; }
-    return unless ($incdir);
-    $incdir .= $nsdir;
-    system("mkdir -p ${incdir}") unless (-d ${incdir});
-    $incdir .= "/" unless ($incdir =~ /\$/);
-    system("mv ${fname}.h ${incdir}${fname}.h"); 
+	$incdir .= $nsdir;
+	system("mkdir -p ${incdir}") unless (-d ${incdir});
+    system("mv ${fname}.h ${incdir}${fname}.h");
+    system("ln -s ${incdir} ./inc") unless (-d "./inc");     
 }
 
+### driver
+system("mkdir src") unless (-d "src");	 	
+system("mkdir test") unless (-d "test");
+my $incdir=""; #2 levels
+if (-d "../../include")    { $incdir="../../include/"; }
+elsif (-d "../../inc")     { $incdir="../../inc/"; }
+elsif (-d "../../../include")    { $incdir="../../../include/"; }
+elsif (-d "../../../inc")     { $incdir="../../../inc/"; }
+unless ($incdir)  { # no include
+	print "not found ../../include or ../../inc";  exit(1);
+}
+  
 my $xmls = `ls meta/*.xml`;
-foreach my $xmlfile (split(/\s+/, $xmls)) {
+foreach my $xmlfile (split(/\s+/, $xmls)) {	
 	print "generate *.h/*.cc from file ${xmlfile}\n";
-    generateClass($xmlfile);		
+    generateClass($xmlfile, $incdir);		
 } 
-
-
-#my $fnmae="meta/class.cfg";
-#generateClassXml(-f $fname )  if (-f $fname) ;
-
-#my $argc=@ARGV; print "argc=", $argc

@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<schema targetNamespace="http://www.cpw.com/pkg"
+	xmlns="http://www.w3.org/2001/XMLSchema"
+	xmlns:pkg="http://www.cpw.com/pkg">
+	<include schemaLocation="common.xsd"></include>
+	<element name="deploy" type="pkg:deployType"></element>
+
+	<complexType name="deployType"></complexType>
+</schema>

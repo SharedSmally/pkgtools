@@ -46,7 +46,7 @@ sub genCfuncCode {
 	my ($t1,$t2,$t3,$t4,$t5);
 	
 	push(@ha, "extern \"c\" {"); push(@ca, "extern \"c\" {");
-	foreach $mynode ($node->childNodes()) {
+	foreach my $mynode ($node->childNodes()) {
 		my $name=$node->getName();
 		if ( ($name =~ /^function$/i) || ($name =~ /^f$/i) || ($name =~ /^func/i) ) { 
 			my ($t1,$t2,$t3)=genFuncCode($mynode);

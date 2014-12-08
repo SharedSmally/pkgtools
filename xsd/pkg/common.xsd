@@ -1,3 +1,54 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<schema xmlns="http://www.w3.org/2001/XMLSchema" targetNamespace="http://www.example.org/common" xmlns:tns="http://www.example.org/common" elementFormDefault="qualified">
+<schema targetNamespace="http://www.cpw.com/pkg" elementFormDefault="qualified" xmlns="http://www.w3.org/2001/XMLSchema" xmlns:pkg="http://www.cpw.com/pkg">
+
+    <simpleType name="versionType">
+    	<restriction base="string">
+    		<pattern value="\d.\d.\d"></pattern>
+    	</restriction>
+    </simpleType>
+    
+    <simpleType name="modeType">
+    	<restriction base="string">
+    		<pattern value="[0-7]{3}"></pattern>
+    	</restriction>
+    </simpleType>
+    
+    <complexType name="versionedType">
+    	<attribute name="name" type="string"></attribute>
+    	<attribute name="version" type="string"></attribute>
+    </complexType>
+
+    <complexType name="namedType">
+    	<attribute name="name" type="string"></attribute>
+    </complexType>
+
+    <complexType name="filesType" mixed="true">
+    	<attribute name="base" type="string"></attribute>
+    	<attribute name="prefix" type="string"></attribute>
+    	<attribute name="suffix" type="string"></attribute>
+    	<attribute name="mode" type="modeType"></attribute>
+    	<attribute name="shell" type="string"></attribute>
+    </complexType>
+
+    <complexType name="dirsType">
+    	<attribute name="base" type="string"></attribute>
+    	<attribute name="prefix" type="string"></attribute>
+    	<attribute name="suffix" type="string"></attribute>
+    </complexType>
+
+    <complexType name="dirfilesType" mixed="true">
+    	<attribute name="base" type="string"></attribute>
+    	<attribute name="file" type="string"></attribute>
+    	<attribute name="mode" type="modeType"></attribute>
+    	<attribute name="shell" type="string"></attribute>
+    </complexType>
+
+    <complexType name="linkType" mixed="true">
+    	<attribute name="base" type="string" use="required"></attribute>
+    	<attribute name="dest" type="string" use="required"></attribute>
+    	<attribute name="prefix" type="string"></attribute>
+    	<attribute name="suffix" type="string"></attribute>
+    </complexType>
+
+
 </schema>

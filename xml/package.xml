@@ -1,0 +1,11 @@
+<package name="pkg" version="1.0.0">
+   <dirs base="./">appsrc bin test libsrc lib data meta</dirs>
+   <!-- 
+   <files base="./" prefix="" suffix=".sh" shell="bash" mode="">install uninstall</files>
+   <dirfiles base="./" name="makefile" shell="bash" mode="">libsrc</dirfiles>
+   <link base="./lib" src="/usr/lib" prefix="lib" suffix=".so">openssl crypto</link>
+       
+   <lib ns="" version="1.0.0">modules</lib>   
+   <app>cpw</app>
+    -->
+</package>

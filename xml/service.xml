@@ -1,0 +1,6 @@
+<service namespace="" name="" version="">
+   <!-- dynamically (un)registered by application
+   <file="">list-of-files</file>
+   <files>list-of-files</files>
+    -->
+</service>

@@ -1,0 +1,14 @@
+<app name="">	
+	<!-- configurations for application
+	    <flags>  compiler flags
+	       <cpp></cpp>*
+	       <cxx></cxx>*
+	       <ld></ld>*
+	       <lib></lib>*
+	       <flag name="" value=""/>
+	    </flags> 	
+		<option name="" short="" full="" type="">description</option>*
+		<option name="" short="" full="" type="">description</option>*
+		similar to class definitions
+	-->	
+</app>
