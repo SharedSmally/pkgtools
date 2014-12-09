@@ -1,0 +1,274 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<schema targetNamespace="http://www.cpw.com/pkg"
+	xmlns="http://www.w3.org/2001/XMLSchema"
+	xmlns:pkg="http://www.cpw.com/pkg">
+	<include schemaLocation="type.xsd"></include>
+	<complexType name="ClassType">
+		<complexContent>
+			<extension base="pkg:FullTemplateType">
+				<sequence>
+					<element name="parent" type="pkg:ParentType"
+						maxOccurs="unbounded" minOccurs="0">
+					</element>
+
+
+					<element name="friend" type="pkg:ClassFriendType"
+						maxOccurs="unbounded" minOccurs="0">
+					</element>
+					<element name="using" type="pkg:UsingType"
+						maxOccurs="unbounded" minOccurs="0">
+					</element>
+					<element name="public" type="pkg:ClassMemberType"
+						maxOccurs="unbounded" minOccurs="0">
+					</element>
+					<element name="protected" type="pkg:ClassMemberType"
+						maxOccurs="unbounded" minOccurs="0">
+					</element>
+					<element name="private" type="pkg:ClassMemberType"
+						maxOccurs="unbounded" minOccurs="0">
+					</element>
+				</sequence>
+				<attribute name="name" type="string"></attribute>
+
+				<attribute name="parent" type="string"></attribute>
+
+				<attribute name="access" type="pkg:AccessType"></attribute>
+				<attribute name="default" type="pkg:AccessType">
+				</attribute>
+				<attribute name="copy" type="pkg:AccessType">
+				</attribute>
+				<attribute name="assign" type="pkg:AccessType"></attribute>
+
+				<attribute name="deconstructor" type="pkg:AccessType"></attribute>
+				<attribute name="new" type="pkg:AccessType"></attribute>
+				<attribute name="news" type="pkg:AccessType"></attribute>
+				<attribute name="delete" type="pkg:AccessType"></attribute>
+				<attribute name="deletes" type="pkg:AccessType"></attribute>
+				<attribute name="virtual" type="string"></attribute>
+
+				<attribute name="operators" type="string"></attribute>
+				<attribute name="input" type="boolean"></attribute>
+				<attribute name="output" type="boolean"></attribute>
+
+			</extension>
+		</complexContent>
+	</complexType>
+
+	<complexType name="ClassMemberType">
+		<sequence>
+			<element name="typedef" type="string" maxOccurs="unbounded"
+				minOccurs="0">
+			</element>
+
+            <element name="enum" type="string" maxOccurs="unbounded" minOccurs="0">
+			</element>
+            <element name="class" type="string" maxOccurs="unbounded"
+				minOccurs="0">
+			</element>
+			<element name="struct" type="string" maxOccurs="unbounded" minOccurs="0"></element>
+			<element name="const" type="string" maxOccurs="unbounded"
+				minOccurs="0">
+			</element>
+
+			<element name="vars" type="pkg:ClassVarsType"
+				maxOccurs="unbounded" minOccurs="0">
+			</element>
+			<element name="var" type="pkg:ClassVarType"
+				maxOccurs="unbounded" minOccurs="0">
+			</element>
+			<element name="count" type="pkg:CountType"
+				maxOccurs="unbounded" minOccurs="0">
+			</element>
+			<element name="config" type="pkg:ConfigType"
+				maxOccurs="unbounded" minOccurs="0">
+			</element>
+			<element name="metric" type="pkg:MetricType"
+				maxOccurs="unbounded" minOccurs="0">
+			</element>
+
+			<element name="constructor" type="pkg:ConstructorType"
+				maxOccurs="unbounded" minOccurs="0">
+			</element>
+			<element name="deconstructor" maxOccurs="unbounded"
+				minOccurs="0" type="pkg:DeconstructorType">
+			</element>
+			<element name="method" type="pkg:MethodType"
+				maxOccurs="unbounded" minOccurs="0">
+			</element>
+			<element name="logicalOp" type="pkg:LogicalOpType"
+				maxOccurs="unbounded" minOccurs="0">
+			</element>
+			<element name="mathOp" type="pkg:MathOpType"
+				maxOccurs="unbounded" minOccurs="0">
+			</element>
+			<element name="compareOp" type="pkg:CompareOpType"
+				maxOccurs="unbounded" minOccurs="0">
+			</element>
+			<element name="bitwiseOp" type="pkg:BitwiseOpType"
+				maxOccurs="unbounded" minOccurs="0">
+			</element>
+			<element name="unaryOp" type="pkg:UnaryOpType"
+				maxOccurs="unbounded" minOccurs="0">
+			</element>
+			<element name="cast" type="pkg:CastType"
+				maxOccurs="unbounded" minOccurs="0">
+			</element>
+
+		</sequence>
+
+		<attribute name="const" type="boolean"></attribute>
+		<attribute name="static" type="boolean"></attribute>
+		<attribute name="access" type="pkg:FieldAccessEnum"></attribute>
+		<attribute name="virtual" type="string"></attribute>
+		<attribute name="return" type="string"></attribute>
+		<attribute name="throw" type="string"></attribute>
+	</complexType>
+
+	<complexType name="ParentType">
+		<complexContent>
+			<extension base="pkg:TypeType">
+				<attribute name="virtual" type="boolean"></attribute>
+
+				<attribute name="access" type="pkg:AccessType"></attribute>
+
+			</extension>
+		</complexContent>
+	</complexType>
+
+	<simpleType name="FieldAccessEnum">
+		<restriction base="string"></restriction>
+	</simpleType>
+
+    <complexType name="MethodType"></complexType>
+
+    <simpleType name="AccessType">
+    	<restriction base="string">
+    		<enumeration value="public"></enumeration>
+    		<enumeration value="protected"></enumeration>
+    		<enumeration value="private"></enumeration>
+    		<enumeration value="none"></enumeration>
+    	</restriction>
+    </simpleType>
+    
+    <complexType name="ClassFriendType" mixed="true">
+    	<sequence>
+    		<element name="class" type="string" maxOccurs="unbounded"
+    			minOccurs="0">
+    		</element>
+    		<element name="struct" type="string" maxOccurs="unbounded"
+    			minOccurs="0">
+    		</element>
+    		<element name="function" type="string" maxOccurs="unbounded"
+    			minOccurs="0">
+    		</element>
+    		<element name="cfunction" type="string" maxOccurs="unbounded" minOccurs="0"></element>
+    	</sequence>
+    	<attribute name="class" type="string"></attribute>
+    	<attribute name="struct" type="string"></attribute>
+    	<attribute name="namespace" type="string"></attribute>
+    </complexType>
+
+    <simpleType name="VirtualFnEnum">
+    	<restriction base="string">
+    		<enumeration value="true"></enumeration>
+    		<enumeration value="false"></enumeration>
+    		<enumeration value="pure"></enumeration>
+    	</restriction>
+    </simpleType>
+
+    <complexType name="ClassVarsType"></complexType>
+
+    <complexType name="ClassVarType"></complexType>
+
+    <complexType name="CountType"></complexType>
+
+    <complexType name="ConfigType"></complexType>
+
+    <complexType name="MetricType"></complexType>
+
+    <complexType name="ConstructorType"></complexType>
+
+    <complexType name="DeconstructorType"></complexType>
+
+    <complexType name="LogicalOpType"></complexType>
+
+    <complexType name="MathOpType">
+    	<sequence>
+    		<element name="arg" type="string"></element>
+    	</sequence>
+    	<attribute name="op" type="pkg:MathOpEnum"></attribute>
+    	<attribute name="arg" type="string"></attribute>
+    	<attribute name="assign" type="boolean"></attribute>
+    </complexType>
+
+    <complexType name="CompareOpType"></complexType>
+
+    <complexType name="BitwiseOpType"></complexType>
+
+    <complexType name="UnaryOpType"></complexType>
+
+    <simpleType name="UnaryOpEnum">
+    	<restriction base="string">
+    		<enumeration value="++"></enumeration>
+    		<enumeration value="--"></enumeration>
+    		<enumeration value="+"></enumeration>
+    		<enumeration value="-"></enumeration>
+    		<enumeration value="[]"></enumeration>
+    		<enumeration value="~"></enumeration>
+    		<enumeration value="!"></enumeration>
+    		<enumeration value="*"></enumeration>
+    		<enumeration value="pointer"></enumeration>
+    		<enumeration value="new"></enumeration>
+    		<enumeration value="delete"></enumeration>
+    		<enumeration value=""></enumeration>
+    		<enumeration value=""></enumeration>
+    	</restriction>
+    </simpleType>
+
+    <simpleType name="MathOpEnum">
+    	<restriction base="string">
+    		<enumeration value="+"></enumeration>
+    		<enumeration value="-"></enumeration>
+    		<enumeration value="*"></enumeration>
+    		<enumeration value="%"></enumeration>
+    		<enumeration value="/"></enumeration>
+    	</restriction>
+    </simpleType>
+
+    <simpleType name="LogicalOpEnum">
+    	<restriction base="string"></restriction>
+    </simpleType>
+
+    <simpleType name="RelationOpEnum">
+    	<restriction base="string">
+    		<enumeration value="EQ"></enumeration>
+    		<enumeration value="NE"></enumeration>
+    		<enumeration value="GT"></enumeration>
+    		<enumeration value="GE"></enumeration>
+    		<enumeration value="LT"></enumeration>
+    		<enumeration value="LE"></enumeration>
+    	</restriction>
+    </simpleType>
+
+    <simpleType name="BitwiesOpEnum">
+    	<restriction base="string">
+    		<enumeration value="AND"></enumeration>
+    		<enumeration value="OR"></enumeration>
+    		<enumeration value="XOR"></enumeration>
+    		<enumeration value="LEFT_SHIFT"></enumeration>
+    		<enumeration value="RIGHT_SHIFT"></enumeration>
+    	</restriction>
+    </simpleType>
+
+    <complexType name="CastType"></complexType>
+
+    <complexType name="UsingType" mixed="true">
+        <annotation>
+        	<documentation>generate code:
+using namespace as alias;
+using [namespace] xxx;   </documentation>
+        </annotation>
+        <attribute name="namespace" type="string"></attribute>
+    	<attribute name="alias" type="string"></attribute>
+    </complexType>
+</schema>

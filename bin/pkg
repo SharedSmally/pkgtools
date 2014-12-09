@@ -1,0 +1,71 @@
+#!/usr/bin/bash
+#
+# driver for product/package
+#
+
+function printCmdArgs {
+	echo "The number of arguments is: $#"
+	a=${@}
+	echo "The total length of all arguments is: ${#a}: "
+	count=0
+	for var in "$@"; do
+    	echo "The length of argument '$var' is: ${#var}"
+    	(( count++ ))
+    	(( accum += ${#var} ))
+	done
+}
+
+#echo " check pkg/package.xml ...";
+if [ -f pkg/package.xml ]; then    
+    if [ pkg/package.xml -nt makefile ]; then   
+   	    pkg_package.pl pkg/package.xml; 
+   	else
+   	    echo "makefile already updated by pkg/package.xml"
+   	fi
+	exit 0; 
+fi
+
+#echo " check pkg/product.xml ...";
+if [ -f pkg/product.xml ]; then   
+	if [ pkg/product.xml -nt makefile ]; then
+   		pkg_product.pl pkg/product.xml; exit 0;
+   	else
+   	    echo "makefile already updated by pkg/product.xml"   		
+   	fi 
+fi
+
+types=(library lib mod module app application db database svc service);
+
+for file in "${types[@]}"; do   	
+   	if [ -f meta/${file}.xml ]; then
+   		#if [ meta/${file}.xml -nt makefile ]; then
+   			pkg_${file}.pl meta/${file}.xml; exit 0;
+   		#else
+   	    # 	echo "makefile already updated by meta/${file}.xml"; exit 0;   		
+   		#fi    	   	      	
+   	fi
+done
+
+#printCmdArgs ${@}
+if [ $# -eq 0 ]; then
+   echo "Usage:  pkg pkgname [pkgdir] [pkgversion] [pkg|prod] ";
+   exit 1;
+fi
+
+#S0: command name
+pkgname=$1;     pkgdir=$pkgname;
+pkgver="1.0.0"; pkgtype="pkg"
+if [ $# -ge 2 ]; then
+   pkgdir=$2;
+   if [ $# -ge 3 ]; then
+      pkgver=#3;
+      if [ $# -ge 4 ]; then
+         pkgtype=$4;
+      fi
+   fi
+fi
+
+#echo " Running  \"pkg ${pkgname} ${pkgdir} ${pkgver} ${pkgtype}\" ";
+
+pkg_init.pl ${pkgname} ${pkgdir} ${pkgver} ${pkgtype}
+

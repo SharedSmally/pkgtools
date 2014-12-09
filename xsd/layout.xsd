@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<schema xmlns="http://www.w3.org/2001/XMLSchema" targetNamespace="http://www.example.org/layout" xmlns:tns="http://www.example.org/layout" elementFormDefault="qualified">
+
+    <element name="layout" type="tns:LayoutType"></element>
+    
+    <complexType name="LayoutType">
+    	<sequence>
+    		<element name="fileset" type="tns:FilesetType"
+    			maxOccurs="unbounded" minOccurs="0">
+    		</element>
+    		<element name="dirset" type="tns:DirsetType"
+    			maxOccurs="unbounded" minOccurs="0">
+    		</element>
+    		<element name="dirfileset" type="tns:DirfilesetType"
+    			maxOccurs="unbounded" minOccurs="0">
+    		</element>
+    		<element name="link" type="tns:LinkCopyType" maxOccurs="unbounded" minOccurs="0"></element>
+    		<element name="copy" type="tns:LinkCopyType" maxOccurs="unbounded" minOccurs="0"></element>
+    	</sequence>
+    </complexType>
+
+    <complexType name="FilesetType" mixed="true">
+    	<attribute name="home" type="string"></attribute>
+    	<attribute name="prefix" type="string"></attribute>
+    	<attribute name="suffix" type="string"></attribute>
+    	<attribute name="mode" type="string"></attribute>
+    </complexType>
+
+    <complexType name="DirsetType" mixed="true">
+    	<sequence></sequence>
+    	<attribute name="home" type="string"></attribute>
+    	<attribute name="prefix" type="string"></attribute>
+    	<attribute name="suffix" type="string"></attribute>
+    	<attribute name="mode" type="string"></attribute>
+    </complexType>
+
+    <complexType name="DirfilesetType" mixed="true">
+    	<attribute name="home" type="string"></attribute>
+    	<attribute name="prefix" type="string"></attribute>
+    	<attribute name="suffix" type="string"></attribute>
+    	<attribute name="mode" type="string"></attribute>
+    	<attribute name="file" type="string"></attribute>
+    </complexType>
+
+    <complexType name="LinkCopyType" mixed="true">
+    	<attribute name="prefix" type="string"></attribute>
+    	<attribute name="suffix" type="string"></attribute>
+    	<attribute name="srcdir" type="string"></attribute>
+    	<attribute name="destdir" type="string"></attribute>
+    </complexType>
+</schema>

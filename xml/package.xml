@@ -1,3 +1,4 @@
+<?xml version="1.0"?>
 <package name="pkg" version="1.0.0">
    <dirs base="./">appsrc bin test libsrc lib data meta</dirs>
    <!-- 
