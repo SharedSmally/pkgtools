@@ -14,9 +14,10 @@ use base 'Exporter';
 our @EXPORT = qw(
      trim padding paddingArray
      isTrue isFalse
-     getNSDirStr getNSIncStr getNSPrefixStrs getNSSuffixStrs      
+     getNSDirStr getNSIncStr getNSPrefixStrs getNSSuffixStrs
+     contains getUnique format_join      
      toDir cmdDir lsArray normalizeNS
-     arrayNormStr readArray writeArray
+     arrayNormStr readArray writeArray          
      );
 
 ########################################### const
@@ -31,6 +32,8 @@ use constant SPACES => "   ";
 use constant SEPERATOR => ",";
 use constant DEFAULT_LEN => 20;
 use constant DEFAULT_DELTA_LEN => 5;
+
+our $MY_SEP=",";
 #
 #use common; #import all constants
 #my $SP3=common::SPACES;
@@ -44,9 +47,10 @@ use constant DEFAULT_DELTA_LEN => 5;
 #my $sp1=$OUR_SP1;
 #my $sp2=common::$OUR_SP2;
 #
-our $OUR_SPACES="   ";
-our $OUR_SP4="    ";
-
+our $BACKUP=0;
+our $OUR_SPACES="   "; our $OUR_SP4="    ";
+our $CC_SEP=","; our $DENTS=" "x3;
+our $SP1=" "x3;  our $SP2=${SP1}x2;
 ###########################################
 #to lower case: lc
 #to upper case:uc
@@ -125,6 +129,27 @@ sub arrayNormStr {
 	return split($sep, $s0);
 }
 #############
+# trim a string and replace SPACES* and ; with ,
+sub trimText {
+   my $s0=trim($_[0]);
+   $s0 =~ s/\s+/${MY_SEP}/g; $s0 =~ s/";"+/${MY_SEP}/g; 
+   $s0 =~ s/","+/${MY_SEP}/g;$s0 =~ s/${MY_SEP}+/${MY_SEP}/g;
+   return $s0;
+}
+sub trimNewLine
+{
+   my $s0 = trimText($_[0]); #print "original: $s0\n";
+   $s0 =~ s/\r/${MY_SEP}/g;  
+   $s0 =~ s/\n/${MY_SEP}/g;  # print "replaced: $s0\n"; 
+   return $s0; 
+}
+sub splitText { 
+   return split(${MY_SEP}, trimText($_[0]));
+}
+sub onlySplitText {
+   return split(${MY_SEP}, $_[0]);
+}
+####################################################
 # return strings from namespace A::B::C/A.B.C
 # normalize namespace to A.B.C
 sub normalizeNS {
@@ -161,6 +186,87 @@ sub getNSSuffixStrs {
 	}	
 	return \@array;	
 }
+
+####################################################
+# whether str is in container @a0;
+sub contains {
+    my $str = $_[0]; 
+    foreach my $s0  (@{$_[1]}) {
+       if ($str eq $s0) { return 1; }
+    }
+    return 0;
+}
+# return the unique element of an array
+sub getUnique {
+    my %seen = ();  my @r = ();
+    foreach my $a (@{$_[0]}) {
+        unless ($seen{$a}) {  push (@r, $a);   $seen{$a} = 1; }
+    }
+    return \@r;
+}
+####################################################
+
+###############################################################
+my $MAX_COL=80;
+#
+# join a list of strings into multi-row strings, max len for each row is MAX_COL  
+# input: 
+#   arg0: array of strings 
+#   arg1: separator string  (opt)
+#   arg2: prefix string for each row (opt)
+#   arg3: string added for first row (opt)
+#   arg4: string appended for last row (opt)
+#   arg5: string appended for each (opt)
+# return:
+#   the formatted string
+# 
+sub format_join {  #@array; $sep, [$prefix; $firststr, $laststr]:
+   return "" unless ($_[0]);
+   my @as=@{$_[0]};
+   my $sep=${CC_SEP}; $sep=$_[1] if ($_[1]);
+   my $prefix="";  $prefix=$_[2] if ($_[2]);
+   my $f0="";  $f0=$_[3] if ($_[3]);
+   my $fn="";  $fn=$_[4] if ($_[4]);
+   my $suf="";  $suf=$_[5] if ($_[5]);
+   
+   my $total_cnt=scalar(@as); 
+   return "${f0}${fn}" if ($total_cnt==0);
+   return "${f0}$as[0]${fn}" if ($total_cnt==1);
+   
+   #print "ta=", @{$_[0]}, "\n";   
+   my (@ta, $x0, $x1);
+   my $ss=length($sep);
+   my $cnt=0; my $size=0; my $empty=1;
+   
+   foreach my $t0 (@{$_[0]}) {
+     $cnt ++;  $empty=0; #$size0 = $size + length($t0) + $ss;
+     if ($cnt==1) { #first one
+        $x0 = "${f0}${t0}${sep}";
+        if (length($x0)>$MAX_COL) {  push(@ta, $x0.${suf}); $x0="${prefix}"; $size=length($x0);
+        } else {  $size=length($x0); }
+     } elsif ($cnt == $total_cnt) {
+        $t0 .= $fn; 
+        if ($size + length($t0) > $MAX_COL) {
+           push(@ta, $x0);  $x1 = "${prefix}${t0}"; push(@ta, $x1.${suf});
+        } else {
+           $x0 .= "$t0"; push(@ta, $x0.${suf}); 
+        }
+        $x0=""; $size=0;
+     } else {
+        $t0 .= $sep;
+        if ($size + length($t0) > $MAX_COL) {
+           push(@ta, $x0.${suf});  $x0 = "${prefix}${t0}"; $size=length($x0);
+        } else {
+           $x0 .= $t0; $size += length($t0);
+        }     
+     } 
+   }
+
+   #print "ta=", join(";",@ta), "\n"; #print "prefix=${prefix};\n";
+   if ($empty) { return "${f0}${fn}" ; }
+   else {   return join("\n", @ta); }
+}
+###############################################################
 ######################
 sub readArray {
 	my $filename=$_[0];

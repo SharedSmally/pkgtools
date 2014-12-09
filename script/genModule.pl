@@ -7,6 +7,9 @@ use common;
 use commonXml;
 use commonXmlAction;
 
+use commonMD5 qw(parseLabelFiles);
+#use commonCFile qw(genCFileCode );
+
 sub generateModule {
 	my $root=$_[0];
 	my $name=getXmlAttr($root,"name");
@@ -48,7 +51,8 @@ unless (-d $hdir) {print " inc not exist ${hdir}\n"; exit(2);}
 my $ns1 = getNSDirStr($ns);
 #print ("mkdir -p ${hdir}${ns1}; ln -s ${hdir}${ns1} inc");
 system("mkdir -p ${hdir}${ns1};");
-system("ln -s ${hdir}${ns1} inc/");
+my $cmd ="ln -s ${hdir}${ns1} inc"; print "cmd=${cmd}\n";
+#system("ln -s ${hdir}${ns1} inc/");
 
 for my $cfile (@a0) {		
 	next if (trim($cfile) eq "meta/module.xml" );
@@ -57,10 +61,15 @@ for my $cfile (@a0) {
 	my $fname = getXmlAttr($cnode,"name","");
 	$fname = getXmlAttr($cnode,"file") if (length($fname)==0);
 	
-	my ($h0,$c0)=genCFileCode($cnode);
+	my @srcs;
+	push (@srcs, "${fname}.cc") if (-f "${fname}.cc");
+	push (@srcs, "inc/${fname}.h") if (-f "inc/${fname}.h");
 	
-	writeArray("${fname}.h",$h0);
-	writeArray("${fname}.cc",$c0);
+	my $code = parseLabelFiles(\@srcs);	
+	#my ($h0,$c0)=genCFileCode($cnode,$code);
+	
+	#writeArray("${fname}.h",$h0);
+	#writeArray("${fname}.cc",$c0);
 	
 	#system("mv ${fname}.h ${hdir}${fname}.h");
 	#trimFile("src/${fname}.h","${fname}.h");
