@@ -1,0 +1,4 @@
+eclispe: http://www.eclipse.org
+eclipse+perl:http://e-p-i-c.sf.net/updates 
+eclispe+git:
+groovy/gradle/grails:
