@@ -1,0 +1,7 @@
+eclispe: http://www.eclipse.org
+eclipse+perl: http://www.epic-ide.org/updates/
+eclispe+git: http://download.eclipse.org/egit/updates 
+eclispse+maven: http://download.eclipse.org/technology/m2e/releases
+eclipse+svn:http://download.eclipse.org/technology/subversive/2.0/update-site/
+
+groovy/gradle/grails:
