@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<schema xmlns="http://www.w3.org/2001/XMLSchema" xmlns:tns="http://www.example.org/certificate/" targetNamespace="http://www.example.org/certificate/">
+    <annotation>
+    	<documentation>configs to setup CA: ca.xml used by ssl.pl
+all files are stoed in ca_dir/:
+private/: *.pem;*.der (g-rwx,o-rwx)
+secret/: password.txt (g-rwx,o-rwx)
+conf/: serial.txt, index.txt;
+certs/: issued certificates via certificate.xml
+openssl.cnf: OPENSSL configurations </documentation></annotation>
+    <element name="ca" type="tns:ca_type"></element>
+    
+    <complexType name="ca_type">
+    	<sequence>
+    		<choice>
+    			<element name="rsa" type="tns:rsa_type"></element>
+    			<element name="dsa" type="tns:dsa_type"></element>
+    			<element name="ec" type="tns:ec_type"></element>
+    		</choice>
+    		<element name="issuer" type="tns:issuer_type"></element>
+    		<element name="startdate" type="string"></element>
+    		<element name="NewElement" type="string"></element>
+    	</sequence>
+    	<attribute name="name" type="string"></attribute>
+    </complexType>
+    
+    <complexType name="rsa_type">
+    	<attribute name="size">
+    		<simpleType>
+    			<restriction base="int">
+    				<enumeration value="1024"></enumeration>
+    				<enumeration value="2048"></enumeration>
+    				<enumeration value="512"></enumeration>
+    			</restriction>
+    		</simpleType>
+    	</attribute>
+    	<attribute name="NewAttribute" type="string"></attribute>
+    </complexType>
+
+    <complexType name="dsa_type"></complexType>
+
+    <complexType name="ec_type"></complexType>
+
+    <complexType name="issuer_type">
+    	<attribute name="country" type="string"></attribute>
+    	<attribute name="state" type="string"></attribute>
+    	<attribute name="city" type="string"></attribute>
+    	<attribute name="orgName" type="string"></attribute>
+    	<attribute name="orgUnitName" type="string"></attribute>
+    	<attribute name="commonName" type="string"></attribute>
+    </complexType>
+</schema>

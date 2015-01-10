@@ -51,8 +51,8 @@ unless (-d $hdir) {print " inc not exist ${hdir}\n"; exit(2);}
 my $ns1 = getNSDirStr($ns);
 #print ("mkdir -p ${hdir}${ns1}; ln -s ${hdir}${ns1} inc");
 system("mkdir -p ${hdir}${ns1};");
-my $cmd ="ln -s ${hdir}${ns1} inc"; print "cmd=${cmd}\n";
-#system("ln -s ${hdir}${ns1} inc/");
+#my $cmd ="ln -s ${hdir}${ns1} inc"; print "cmd=${cmd}\n";
+system("ln -s ${hdir}${ns1} inc/; rm -rf ${hdir}${ns1}/*");
 
 for my $cfile (@a0) {		
 	next if (trim($cfile) eq "meta/module.xml" );
@@ -66,10 +66,10 @@ for my $cfile (@a0) {
 	push (@srcs, "inc/${fname}.h") if (-f "inc/${fname}.h");
 	
 	my $code = parseLabelFiles(\@srcs);	
-	#my ($h0,$c0)=genCFileCode($cnode,$code);
+	my ($h0,$c0)=genCFileCode($cnode,$code);
 	
-	#writeArray("${fname}.h",$h0);
-	#writeArray("${fname}.cc",$c0);
+	writeArray("${fname}.h",$h0);
+	writeArray("${fname}.cc",$c0);
 	
 	#system("mv ${fname}.h ${hdir}${fname}.h");
 	#trimFile("src/${fname}.h","${fname}.h");
