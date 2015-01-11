@@ -1,6 +1,10 @@
 <module name="" namespace="">
+
     <!-- 
-    <cfile file="">list-of-classes-in-onefile-"file.xml"</cfile>
-    <cfiles >list-of-classes-in-dividual-file.xml</cfiles>
+    each class has its own file name
+    <cfile ></cfile>
+    
+    all classes share one file
+    <cfile file=""></cfile>    
     -->
 </module>

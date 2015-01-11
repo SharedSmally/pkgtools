@@ -17,7 +17,7 @@ our @EXPORT = qw(
         getListArray
 		getXmlDir getXmlPrefix getXmlSuffix getXmlNS
 		genXmlDirs genXmlFiles genXmlDirFiles 
-		genLinks genCopy genCommand 
+		genXmlLink genXmlCopy genXmlCommand 
 		genCFile genCFileCode
 	) ;
 
@@ -177,15 +177,23 @@ sub genCFile {
 				$n0->setAttribute("name",$name);
 			}
 		}
+		#print "final xml:".$root->toString();
 		writeXml($root,$cfile);	
 	} else {
-		foreach my $name (@{getXmlTextArray($node)}) {		
-			copyTemplateXml($xfile,"meta/${name}.xml",$name,$ns);
+		foreach my $name (@{getXmlTextArray($node)}) {	
+			my $cfile="meta/${name}.xml";
+			copyTemplateXml($xfile,$cfile,$name,$ns);
+			my $root = getXmlRoot($cfile);
+			if (!hasChild($root,$name)) {
+				my $n0 = $root->addNewChild( "", "class");
+				$n0->setAttribute("name",$name);
+			}
+			writeXml($root,$cfile);	
 		}	
 	}			
 }
 
-#
+#########################################################
 # generate *.h/*.cc code from <cfile>***</cfile> 
 # return array for header/cc
 #

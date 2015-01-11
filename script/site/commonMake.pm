@@ -12,25 +12,48 @@ use base 'Exporter';
 #our @ISA = qw(Exporter);
 #################################
 our @EXPORT = qw(
-	makeSubdirs  
+	makeSubdirsMk makeLibMk makeModMk
      );
 
 use common;
 
 ###########################################
-sub makeSubdirs {
+sub makeSubdirsMk {
 	my $mfile=$_[0]; my @subdirs=@{$_[1]};
-	my @array;
-	
-	push(@array, "")
-	
-	foreach $s0 (@subdirs) {
 		
-	}
+	unshift @subdirs, ('SUBDIRS = ',);
+	my @array = @{paddingArray(\@subdirs," " x 3, "\\")};
 	
-	  
-	writeArray($mfile,@array);
+    my @a0 = ("", 
+     ".PHONY: subdirs \$(SUBDIRS)","",     
+     "subdirs: \$(SUBDIRS)", "",
+	 "\$(SUBDIRS):",
+	 "\t\$(MAKE) -C \$@");
+	
+	push(@array, @a0);
+	
+	writeArray($mfile, \@array);
 }
 ###############################
+sub makeLibMk {
+	my ($mfile, $name, $version)=@_; 
+			
+    my @array = ( 
+     "name=${name}",     
+     "version=${version}",
+	 );
+		
+	writeArray($mfile, \@array);
+}
 
+sub makeModMk {
+	my ($mfile, $name, $version)=@_; 
+			
+    my @array = ( 
+     "%:inc/%.h %.cc",
+     "\t"
+	 );
+		
+	writeArray($mfile, \@array);
+}
 ###########################################

@@ -66,6 +66,16 @@ sub rtrim {
 sub trim {
 	return ltrim(rtrim($_[0]));
 }
+
+###########################################################
+######### padding string with max of length
+#s1: string
+#s2: prefix
+#s3: suffix
+#a4: length
+#
+# return s1{spaces}suffix
+#
 sub padding {
 	my $s0 = $_[0];
 	my $suffix=(@_ >= 2) ? $_[1] : "";
@@ -77,6 +87,11 @@ sub padding {
 }
 ###########
 # padding with prefix(not for firs one) and suffix(not for last one)
+#s1: string array
+#s2: prefix
+#s3: suffix
+#a4: length
+#
 sub paddingArray {
 	my @a0=@{$_[0]};
 	my $prefix=(@_ >= 2) ? $_[1] : "";

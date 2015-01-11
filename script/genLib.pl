@@ -6,8 +6,11 @@ use warnings;
 use common;
 use commonXml;
 use commonXmlAction;
-#
+use commonMake qw(makeSubdirsMk makeLibMk);
+
+#specific namespace
 #<module namespace="">list-of-modules-share-ns</module>
+#namespace={lib_namespace}.name
 #<module>list-of-individual-module-ns</module>
 #
 sub genModule {
@@ -47,6 +50,12 @@ sub generateLibrary {
 		} elsif ($xname =~ /^cfiles$/i) {
 			my $a0 = genCFile($node, $ns, "${cmdir}/cfile.xml");
 		}	
+	}
+	
+	if (length(@mods)>0) {
+		makeSubdirsMk("makefile", \@mods); 
+	} else {
+		makeLibMk("makefile", $name, $version); 
 	}
 }
 ###########################

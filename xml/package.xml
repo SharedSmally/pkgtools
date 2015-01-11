@@ -1,6 +1,6 @@
 <?xml version="1.0"?>
 <package name="pkg" version="1.0.0">
-   <dirs base="./">appsrc bin test libsrc lib data meta</dirs>
+   <dirs base="./">bin test lib include libsrc appsrc data meta</dirs>
    <!-- 
    <files base="./" prefix="" suffix=".sh" shell="bash" mode="">install uninstall</files>
    <dirfiles base="./" name="makefile" shell="bash" mode="">libsrc</dirfiles>

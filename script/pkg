@@ -6,9 +6,12 @@
 
 CMD_PATH=`dirname $0`
 
-if [ "x$DEVTOOLS_HOME" == "x" ]; then 
-	echo "set DEVTOOLS_HOME to ${CMD_PATH}"
-	export DEVTOOLS_HOME=${CMD_PATH}
-fi
+#
+#export/system only work for its subprocesses.
+#
+#if [ "x$DEVTOOLS_HOME" == "x" ]; then 
+#	echo "export DEVTOOLS_HOME=${CMD_PATH}"
+#	export DEVTOOLS_HOME=${CMD_PATH}
+#fi
 
 perl ${CMD_PATH}/pkg.pl "$@"

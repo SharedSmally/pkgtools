@@ -3,9 +3,10 @@
 use strict;
 use warnings;
 
-use common;
-use commonXml;
-use commonXmlAction;
+use common qw(cmdDir writeArray);
+use commonMake qw(makeSubdirsMk);
+use commonXml qw(getXmlRoot getXmlAttr getXmlTextArray getXmlNS copyTemplateXml) ;
+use commonXmlAction qw(genXmlDirs genXmlFiles genXmlDirFiles genXmlLink genXmlCopy genXmlCommand);
 
 sub genXmlApp {
 	my ($node,$version, $xfile)=@_;
@@ -14,15 +15,15 @@ sub genXmlApp {
 	my @names=@{getXmlTextArray($node)};
 
 	foreach my $name (@names) {
-		print "   create app ${name} version=${myver}\n";
+		print "   create application ${name} version=${myver}\n";
 		system("mkdir -p appsrc/${name}/meta");
 		copyTemplateXml($xfile,"appsrc/${name}/meta/application.xml",$name,$myver);
 	};	
+	
 	return \@names;
 }
 sub genXmlLib {
 	my ($node,$version, $xfile)=@_;
-
 	my $myver=getXmlAttr($node,"version",$version);
 	my $ns=getXmlNS($node,"ns");
 	my @names=@{getXmlTextArray($node)};
@@ -34,14 +35,22 @@ sub genXmlLib {
 	};	
 	return \@names;
 }
+sub genXmlGeneric {
+	return genXmlLib($_);
+}
 
+sub generatePkgEnv {
+	my $cdir=`pwd`;
+	my @array=("#!/usr/bin/bash", "export PKG_HOME=${cdir}" );
+	writeArray("meta/build.sh", \@array);	
+}
 sub generatePackage {
 	my $root=$_[0];	
 	my $name=getXmlAttr($root,"name");		
 	my $version=getXmlAttr($root,"version","1.0.0");
 	my $cmdir = cmdDir(); $cmdir .= "../xml";
 	
-	my @apps; my @libs; my $a0;
+	my (@apps, @libs, @svcs, @pdus, @dbs, @xmls, @srcs); my $a0;
 	
 	foreach my $node ($root->childNodes()) {
 		next if ($node->nodeType == XML::LibXML::XML_TEXT_NODE);
@@ -61,7 +70,9 @@ sub generatePackage {
 		} elsif ($xname =~ /^lib$/i)     { 
 			$a0 = genXmlLib($node,$version,"${cmdir}/library.xml"); push(@libs, @{$a0});
 		} elsif ($xname =~ /^library$/i) { 
-			$a0 = genXmlLib($node,$version,"${cmdir}/library.xml"); push(@libs, @{$a0});
+			$a0 = genXmlLib($node,$version,"${cmdir}/library.xml"); push(@libs, @{$a0});			
+		} elsif ($xname =~ /^svc$/i)     { 
+			$a0 = genXmlService($node,$version,"${cmdir}/service.xml"); push(@libs, @{$a0});
 		} elsif ($xname =~ /^service$/i)     { 
 			$a0 = genXmlService($node,$version,"${cmdir}/service.xml"); push(@libs, @{$a0});
 		} elsif ($xname =~ /^prot$/i)     {
@@ -76,9 +87,21 @@ sub generatePackage {
 			$a0 = genXmlReport($node,$version,"${cmdir}/report.xml"); push(@libs, @{$a0});
 		} elsif ($xname =~ /^xsd$/i)      { 
 			$a0 = genXmlXsd($node,$version,"${cmdir}/xsd.xml"); push(@libs, @{$a0});
-		}		
+		} else { 
+			if (-f "${cmdir}/${xname}.xml") {
+				$a0 = genXmlGeneric($node,$version,"${cmdir}/${xname}.xml");
+				push(@libs, @{$a0});
+			}
+		}
 	}
+	
+	#create makefile for libs,apps	
+	if (length(@libs)>0) { makeSubdirsMk("libsrc/makefile", \@libs); push(@srcs,"libsrc");}
+	if (length(@apps)>0) { makeSubdirsMk("appsrc/makefile", \@apps); push(@srcs,"appsrc");}
+	if (length(@srcs)>0) {makeSubdirsMk("makefile", \@srcs); }
+	generatePkgEnv();
 }
+
 ###########################
 my $xfile="meta/package.xml";
 unless (-f $xfile) { print " package not exist ${xfile}\n"; exit(1);}
