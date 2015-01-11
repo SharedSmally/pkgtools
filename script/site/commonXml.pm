@@ -17,7 +17,10 @@ our @EXPORT = qw(
           isXmlFalse isXmlTrue getXmlNS  getXmlFileName         
           getXmlTextArray copyTemplateXml hasChild
           getXmlIncStrs getXmlSrcStrs  getXmlNSStrs 
-          getXmlAttr readXmlRoot getXmlRoot writeXml          
+          getXmlAttr readXmlRoot getXmlRoot writeXml   
+          hasNamedComponent  splitXmlText xmlFile createDoc           
+          getHFileIncs getCFileIncs
+          getPkgHome getIncludeHome 
           ) ;
 
 use common;
@@ -25,13 +28,15 @@ use common;
 # input: $xnode; $name
 sub isXmlTrue {
 	my ($node, $attr)=@_;
-	return 1 if (!$node->hasAttribute($attr));
+	#return 1 if (!$node->hasAttribute($attr));
+	return 0 if (!$node->hasAttribute($attr));
 	return isTrue($node->getAttribute($attr));	
 }
 # input: $xnode; $name
 sub isXmlFalse {
 	my ($node, $attr)=@_;
-	return 1 if (!$node->hasAttribute($attr));
+	#return 1 if (!$node->hasAttribute($attr));
+	return 0 if (!$node->hasAttribute($attr));
 	return isFalse($node->getAttribute($attr));		
 }
 # input: xnode
@@ -125,10 +130,10 @@ sub getXmlSrcStrs {
 	return \@array;
 }
 
- #start,end{; dir(/); prefix(_); ns(::) 
+ #start,end}; dir(/); prefix(_); ns(::) 
 sub getXmlNSStrs {
 	my $ns =  normalizeNS (getXmlNS ($_[0]));	
-	return ("","","","","") if(length($ns)==0);
+	return ("","","","","","") if(length($ns)==0);
 		
 	my (@a0,@a1,@a2);
 	foreach my $s0 (split(/\./,,$ns)) {
@@ -138,9 +143,54 @@ sub getXmlNSStrs {
 	}
 	
 	return (join("\n", @a1), join("\n", @a2), join("/", @a0)."/", 
-	        join("_", @a0)."_", join("::",@a0)."::" );	
+	        join("_", @a0)."_", join("::",@a0)."::", $ns );	
 }
+##############################################
+sub getHFileIncs {
+    my $cnode=$_[0];	
+	my $name=getXmlAttr($cnode,"name");
+	my @nss=getXmlNSStrs($cnode);
+	my $s0="$nss[3]${name}_H";
+	my $ns=$nss[5];
+	
+	my @a0=("#ifndef $s0", "#define $s0\n"); 
+	
+	foreach my $node ($cnode->getChildrenByTagName("h") ) { 
+		if (isXmlTrue($node,"self") && length($ns)>0) {
+			$node->setAttribute("namespace", $ns);
+		}
+		push(@a0, @{getXmlIncStrs($node)});		
+	}	
+	push @a0, ("$nss[0]\n",) if (length($nss[0])>0);
+	
+	my @a1=($nss[1], "\n#endif /* end of ${s0} */");	
+	return (\@a0, \@a1);
+}
+sub getCFileIncs {
+    my $cnode=$_[0];
+	my $name=getXmlAttr($cnode,"name");
+	my @nss=getXmlNSStrs($cnode);
+	my $ns=$nss[5];	
+	my @a0; 
 
+	foreach my $node ($cnode->getChildrenByTagName("c") ) {
+		if (isXmlTrue($node,"self") && length($ns)>0) {
+			$node->setAttribute("namespace", $ns);
+		}		
+		push(@a0, @{getXmlSrcStrs($node)});		
+	}	
+	
+	my $s0="#include <$nss[2]${name}.h>";
+	if (isXmlTrue($cnode,"preset")) { unshift @a0, ($s0."\n", ); 
+	} else { push @a0, ($s0, );	}
+	push @a0, ($nss[0],);
+		
+	my @a1=($nss[1], );	
+		
+	return (\@a0,\@a1);	
+}
+##############################################
+##############################################
 sub getXmlRoot {
 	my $xfile=$_[0];
 	return readXmlRoot($xfile) if (-f $xfile);
@@ -179,6 +229,7 @@ sub copyTemplateXml {
 	
 	writeXml($root,$dstxfile);
 }
+
 #################
 sub hasChild {
 	my $root=$_[0];
@@ -220,15 +271,88 @@ sub readXmlRoot {
  
 sub writeXml {
 	my ($root, $xfile)=@_;	
-	#print "write xml file to ${xfile}\n";
 	open XML, ">${xfile}";
 	print XML $root->toString(1); #(), or 1,2
 	close XML;
-	# save
-  	#open my $out, '>', 'out.xml';
-  	#binmode $out; # as above
-  	#$doc->toFH($out);
-	# or
-	# print {$out} $doc->toString();	
 }
+
+###############################################################
+sub hasNamedComponent {
+    if ($_[2]) {
+        foreach my $t1 ($_[0]->getElementsByTagName($_[1])) {
+            next unless ($t1->hasAttribute("name"));
+            return 1 if ($t1->getAttribute("name") eq $_[2]);
+        }
+        return 0;
+    } else {
+       foreach my $t1 ($_[0]->childNodes()) {
+          next if ($t1->nodeType != XML_ELEMENT_NODE);
+          next unless ($t1->hasAttribute("name"));
+          return 1 if ($_[1] eq $t1->getAttribute("name") );
+       }
+       return 0;
+    }
+}
+sub splitXmlText {   
+   return splitText(trimNewLine($_[0]->textContent));
+}
+
+# save xml node in a file
+# arg1: xml node
+# arg2: xml file name
+my $XML_FORMAT=1;  #dent output
+sub xmlFile {
+    $_[0]->ownerDocument->toFile($_[1], $XML_FORMAT);
+}
+sub createDoc {
+  my $doc = XML::LibXML::Document->new("1.0");
+  my $root = $doc->createElement($_[0]);
+  $doc->setDocumentElement($root);
+  return $doc;
+}
+###############################################################
+# get pkg_home from pkgname and env vars
+###############################################################
+sub getPkgHome {
+   if (exists $ENV{"PKG_HOME"}) {  
+       my $t1=$ENV{"PKG_HOME"}; 
+       $t1 .= "/" unless ($t1 =~ /\/$/);
+       return $t1;
+   } 
+
+   my $t1=getXmlAttr($_[0],"pkgname","");
+   $t1=getXmlAttr($_[0],"pkg","") unless ($t1);
+   unless ($t1) {
+      print "*** WARNING: no pkgname attr for\n", $_[0]->toString(1),"\n";
+      return "";
+   }
+   my $pkgenv=uc($t1); $pkgenv .= "_HOME";
+   if (exists $ENV{$pkgenv}) {  
+       my $t1=$ENV{$pkgenv}; 
+       $t1 .= "/" unless ($t1 =~ /\/$/);
+       return $t1;
+   } else {
+      print "*** ERROR: no ENV var ${pkgenv}/PKG_HOME for pkg $t1\n"; 
+      exit(1); return "";
+   }
+}
+sub getIncludeHome {
+   my $t1=getPkgHome($_[0]);
+   unless ($t1) { return "";}
+   $t1 .="include/";
+   #my $libname=getXmlAttr($_[0],"libname","");
+   #unless ($libname) { 
+   #   print "*** WARNING: no libname attr for\n", $_[0]->toString(1),"\n";
+   #   return $t1;
+   #}
+   #$libname .= "/" unless ($libname =~ /\/$/);
+   my $libname=getXmlAttr($_[0],"namespace","");
+   if ($libname) {
+      $libname =~  s/\./\//g;
+      $libname .= "/" unless ($libname =~ /\/$/);
+   }
+   return "${t1}${libname}";
+}
+###############################################################
+####################################################
 ###########################################

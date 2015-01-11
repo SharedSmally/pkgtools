@@ -1,4 +1,4 @@
-package CommonDefine;
+package commonCode;
 
 use strict;
 use warnings;
@@ -8,8 +8,8 @@ use XML::LibXML;
 
 use common qw( trim splitText $SP1 format_join );
 use commonXml qw( getXmlAttr splitXmlText isXmlTrue isXmlFalse);
-use commonType qw(getTypeStr getTemplateTypeStrs 
-       getReturnStr getArgsStrings isInline isRealInline isVirtual getImplStrings);
+use commonType qw(getTypeStr getTemplateTypeStrs
+         getReturnStr getArgsStrings isInline isRealInline isVirtual getImplStrings);
 use commonMD5 qw(getMDLabels);
 
 #define a module

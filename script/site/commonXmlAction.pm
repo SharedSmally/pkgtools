@@ -18,7 +18,7 @@ our @EXPORT = qw(
 		getXmlDir getXmlPrefix getXmlSuffix getXmlNS
 		genXmlDirs genXmlFiles genXmlDirFiles 
 		genXmlLink genXmlCopy genXmlCommand 
-		genCFile genCFileCode
+		genCFile genSimpleCFileCode
 	) ;
 
 use common;
@@ -197,7 +197,7 @@ sub genCFile {
 # generate *.h/*.cc code from <cfile>***</cfile> 
 # return array for header/cc
 #
-sub  genCFileCode {
+sub  genSimpleCFileCode {
 	my ($root, $codemap)=@_;		
 	my $name=getXmlFileName($root);
 	my @nsstrs = getXmlNSStrs($root); #start/end{; dir(/); prefix(_); ns(::)

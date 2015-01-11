@@ -6,11 +6,11 @@ use warnings;
 
 use common;
 use commonXml;
-use commonXmlAction qw(genCFile genCFileCode);
+use commonXmlAction qw(genCFile); # genSimpleCFileCode
 use commonMake qw(makeModMk);
 
 use commonMD5 qw(parseLabelFiles);
-#use commonCFile qw(genCFileCode );
+use commonCFile qw(genCFileCode); #
 
 sub generateModule {
 	my $root=$_[0];
@@ -59,15 +59,13 @@ for my $cfile (@a0) {
 	next if (trim($cfile) eq "meta/module.xml" );
 	print " generate *.h/*.cc from ${cfile}\n";
 	my $cnode = getXmlRoot($cfile);
-	my $fname = getXmlAttr($cnode,"name","");
-	$fname = getXmlAttr($cnode,"file") if (length($fname)==0);
+	my $fname = getXmlAttr($cnode,"name");
 	
 	my @srcs;
 	push (@srcs, "${fname}.cc") if (-f "${fname}.cc");
 	push (@srcs, "inc/${fname}.h") if (-f "inc/${fname}.h");
-	
-	my $code = parseLabelFiles(\@srcs);	
-	my ($h0,$c0)=genCFileCode($cnode,$code);
+		
+	my ($h0,$c0,$utest)=genCFileCode($cnode);
 	
 	writeArray("inc/${fname}.h",$h0);
 	writeArray("${fname}.cc",$c0);	

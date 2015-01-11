@@ -8,18 +8,19 @@ package common;
 use strict;
 use warnings;
 use base 'Exporter';
-
+our $DEBUG=0;
 #our @ISA = qw(Exporter);
 #################################
 our @EXPORT = qw(
-     trim padding paddingArray
-     isTrue isFalse
+     trim splitText
+     padding paddingArray
+     isTrue isFalse info
      getNSDirStr getNSIncStr getNSPrefixStrs getNSSuffixStrs
      contains getUnique format_join      
      toDir cmdDir lsArray normalizeNS
-     arrayNormStr readArray writeArray          
+     arrayNormStr readArray writeArray   
+     $DENTS $SP1 $SP2 $CC_SEP $BACKUP       
      );
-
 ########################################### const
 #use constant { SEC   => 0,    MIN   => 1, };
 #use constant PI    => 4 * atan2(1, 1);
@@ -34,6 +35,7 @@ use constant DEFAULT_LEN => 20;
 use constant DEFAULT_DELTA_LEN => 5;
 
 our $MY_SEP=",";
+our $BACKUP=0;
 #
 #use common; #import all constants
 #my $SP3=common::SPACES;
@@ -47,7 +49,6 @@ our $MY_SEP=",";
 #my $sp1=$OUR_SP1;
 #my $sp2=common::$OUR_SP2;
 #
-our $BACKUP=0;
 our $OUR_SPACES="   "; our $OUR_SP4="    ";
 our $CC_SEP=","; our $DENTS=" "x3;
 our $SP1=" "x3;  our $SP2=${SP1}x2;
@@ -65,6 +66,25 @@ sub rtrim {
 }
 sub trim {
 	return ltrim(rtrim($_[0]));
+}
+# trim a string and replace SPACES* and ; with ,
+sub trimText {
+   my $s0=trim($_[0]);
+   $s0 =~ s/\s+/${MY_SEP}/g; $s0 =~ s/";"+/${MY_SEP}/g; 
+   $s0 =~ s/","+/${MY_SEP}/g;$s0 =~ s/${MY_SEP}+/${MY_SEP}/g;
+   return $s0;
+}
+sub trimNewLine{
+   my $s0 = trimText($_[0]); #print "original: $s0\n";
+   $s0 =~ s/\r/${MY_SEP}/g;  
+   $s0 =~ s/\n/${MY_SEP}/g;  # print "replaced: $s0\n"; 
+   return $s0; 
+}
+sub splitText { 
+   return split(${MY_SEP}, trimText($_[0]));
+}
+sub onlySplitText {
+   return split(${MY_SEP}, $_[0]);
 }
 
 ###########################################################
@@ -143,27 +163,7 @@ sub arrayNormStr {
 	$s0 =~ s/\s+/${sep}/g; $s0 =~ s/\,+/${sep}/g; $s0 =~ s/:+/${sep}/g;
 	return split($sep, $s0);
 }
-#############
-# trim a string and replace SPACES* and ; with ,
-sub trimText {
-   my $s0=trim($_[0]);
-   $s0 =~ s/\s+/${MY_SEP}/g; $s0 =~ s/";"+/${MY_SEP}/g; 
-   $s0 =~ s/","+/${MY_SEP}/g;$s0 =~ s/${MY_SEP}+/${MY_SEP}/g;
-   return $s0;
-}
-sub trimNewLine
-{
-   my $s0 = trimText($_[0]); #print "original: $s0\n";
-   $s0 =~ s/\r/${MY_SEP}/g;  
-   $s0 =~ s/\n/${MY_SEP}/g;  # print "replaced: $s0\n"; 
-   return $s0; 
-}
-sub splitText { 
-   return split(${MY_SEP}, trimText($_[0]));
-}
-sub onlySplitText {
-   return split(${MY_SEP}, $_[0]);
-}
+
 ####################################################
 # return strings from namespace A::B::C/A.B.C
 # normalize namespace to A.B.C
@@ -296,6 +296,7 @@ sub readArray {
 sub writeArray {
 	my $filename=$_[0];
 	my @array=@{$_[1]};
+	return if (@array==0);
 	print "save array to ${filename}\n";
 	
 	open(my $fh, ">$filename")  or die "Could not open file '${filename}' $!";
@@ -303,6 +304,21 @@ sub writeArray {
 	close ($fh);	
 }
 ###########################################
+
+################
+sub info {
+    print "  [INFO]:@_\n";
+}
+sub debug {
+    if ($DEBUG) {  print "[DEBUG]:@_\n"; };
+}
+sub warn {
+    print "  [WARN]:@_\n";
+}
+sub error {
+   print "  [ERROR]:@_\n";;
+}
+##########################################
 
 ################
 sub toDir {	

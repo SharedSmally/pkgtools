@@ -2,10 +2,20 @@
     <!-- 
     <h></h>
     <c></c>
-    <macro name=""></macro>
-    <name=""></macro>
+    <macro name=""></macro>    
+    <use name=""><item></use>
+    <enum name=""><item></enum>
+    <decl name=""></decl>
+    
+    <define name=""></define>    
+    <typedef name=""></typedef>
+    
     <func name=""></func>
-    <cfunc name=""></cfunc>
+    <cfunc name=""></cfunc> 
+    <var name=""></var>
+    <const name=""></const> 
+       
+    <union name=""></union>
     <class name=""></class>
     <struct name=""></struct>
      -->

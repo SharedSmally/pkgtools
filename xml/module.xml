@@ -1,6 +1,14 @@
 <module name="" namespace="">
-
-    <!-- 
+    <!-- compiling env
+    incpath: -Ixxx
+    
+    libpath: -Lxxx
+    
+    library/lib:-lxxx
+    
+    flags: -Dxxx: name=value    
+    
+    classes definition
     each class has its own file name
     <cfile ></cfile>
     

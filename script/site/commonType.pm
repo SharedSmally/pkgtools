@@ -12,8 +12,8 @@ use base 'Exporter';
 
 use XML::LibXML;
 
-use common qw( trim splitText contains format_join is_true);
-use commonXml qw( xmlRoot getXmlAttr isXmlTrue isXmlFalse);
+use common qw( trim splitText contains format_join isTrue);
+use commonXml qw(getXmlAttr isXmlTrue isXmlFalse);
 
 #define a module
 our @ISA= qw( Exporter );
@@ -335,7 +335,7 @@ sub getTemplateTypeStrs {
 sub isVirtual {
     return 0 unless ($_[0]->hasAttribute("virtual"));
     my $s0=$_[0]->getAttribute("virtual");
-    return (is_true($s0) || ($s0 =~ /^pure$/i ) );
+    return (isTrue($s0) || ($s0 =~ /^pure$/i ) );
 }
 ############################################################################
 sub isInline {
