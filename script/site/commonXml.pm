@@ -15,9 +15,9 @@ use XML::LibXML;
 #################################
 our @EXPORT = qw(
           isXmlFalse isXmlTrue getXmlNS  getXmlFileName         
-          getXmlTextArray copyTemplateXml hasChild
+          getXmlTextArray copyTemplateXml hasChild addNodeText
           getXmlIncStrs getXmlSrcStrs  getXmlNSStrs 
-          getXmlAttr readXmlRoot getXmlRoot writeXml   
+          getXmlAttr readXmlRoot getXmlRoot writeXml readXmlDoc 
           hasNamedComponent  splitXmlText xmlFile createDoc           
           getHFileIncs getCFileIncs
           getPkgHome getIncludeHome 
@@ -244,6 +244,11 @@ sub hasChild {
 	return 0;
 }	
 #################
+sub readXmlDoc {
+	my $parser = new XML::LibXML;
+	return $parser -> parse_file($_[0]); # return doc
+}
+
 sub readXmlRoot {
 	my $parser = new XML::LibXML;
 	my $doc = $parser -> parse_file($_[0]);
@@ -271,7 +276,7 @@ sub readXmlRoot {
  
 sub writeXml {
 	my ($root, $xfile)=@_;	
-	open XML, ">${xfile}";
+	open XML, ">${xfile}" or die "cannot open ${xfile}";
 	print XML $root->toString(1); #(), or 1,2
 	close XML;
 }
@@ -354,5 +359,19 @@ sub getIncludeHome {
    return "${t1}${libname}";
 }
 ###############################################################
+sub addNodeText {
+	my ($node,$tagname,$t0)=@_;
+
+	foreach my $n0 ($node->getChildrenByTagName($tagname)) {
+		print "node0=",$n0->toString(1),"\n";
+		foreach my $n1 ($n0->childNodes) { 
+			print "node1=",$n1->toString(1),"\n";	
+			next if ($n0->nodeType != XML_TEXT_NODE);
+			print "text value:",  $n0->nodeValue, "\n";
+		}
+	}
+	
+	return $node;
+}
 ####################################################
 ###########################################

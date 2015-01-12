@@ -14,7 +14,7 @@ our $DEBUG=0;
 our @EXPORT = qw(
      trim splitText
      padding paddingArray
-     isTrue isFalse info
+     isTrue isFalse info isOlder
      getNSDirStr getNSIncStr getNSPrefixStrs getNSSuffixStrs
      contains getUnique format_join      
      toDir cmdDir lsArray normalizeNS
@@ -331,11 +331,16 @@ sub toDir {
 sub cmdDir {
 	return toDir(`dirname $0`);
 }
-
 sub lsArray {
 	my $pattern=$_[0];
 	my $out = `ls ${pattern}`;
 	$out =~ s/\s+/ /g;
 	return split(" ", $out);
+}
+#
+# return true if $f1 is older than $f2
+sub isOlder {
+	my ($f1,$f2)=@_;
+    return  ((stat($f1))[9] < (stat($f2))[9]);		
 }
 ###########################################

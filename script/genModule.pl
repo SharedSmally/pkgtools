@@ -35,6 +35,7 @@ sub generateModule {
 ###########################
 my $xfile="meta/module.xml";
 unless (-f $xfile) { print " module not exist ${xfile}\n"; exit(1);}
+#system("updateXmlMod.pl");
 
 print " generate module from ${xfile}\n";
 my $ns = generateModule(getXmlRoot($xfile));
