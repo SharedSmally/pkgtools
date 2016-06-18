@@ -18,9 +18,10 @@ function printCmdArgs {
    	#    pkg_java.pl ./jar.xml; 
    	#else
    	#    echo "makefile already updated by pkg/package.xml"
-   	#fi
+   	#fi; update
 #	exit 0; 
 #fi
+
 
 pkg_java.pl
 
