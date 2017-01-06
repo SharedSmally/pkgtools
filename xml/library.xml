@@ -1,9 +1,27 @@
-<library namespace="" name="" version="">
-   <!-- normal libraries
-   share the same namespace in module
-   <module namespace="">list-of-modules</module>
-   individual namespace for modules
-   <modules>list-of-modules</modules>
-   no module/modules: using classcfg.xml
+<?xml version="1.0" encoding="UTF-8"?>
+<library name="core" version="1.0.0" namespace="com.cpw.core">
+    <!-- normal libraries
+    share the same namespace in module
+    <module namespace="">list-of-modules</module>
+    individual namespace for modules
+    <modules>list-of-modules</modules>
+    no module/modules: using classcfg.xml
     -->
-</library>
+    <cfile name="Object">Object</cfile>
+    <cfile name="Factory">IFactory Factory</cfile>
+    <cfile>FDObject FDMgr PollMgr EpollMgr SelectMgr</cfile>
+    <cfile>FileMonitor</cfile>
+    <cfile>Path File Directory</cfile>
+    <cfile>Runnable Comparable Cloneable</cfile>
+    <cfile>Executor TpsExecutor</cfile>
+    <cfile>Scheduler Timer Promise</cfile>
+    <cfile>ThreadPool Queue Semaphore</cfile>
+    <cfile name="Task">Task Tasker</cfile>
+    <cfile>Context AppContext App</cfile>
+    <cfile>Component ComponentContext Service</cfile>
+    <cfile>ConfigMgr MetricMgr</cfile>
+    <cfile name="Queryable">Queryable Configurable Resetable</cfile> 
+    <cfile>Query Config Metric Counter</cfile>    
+    <cfile>Bundle BundleContext BundleMgr</cfile>
+    <cfile>Event EventListener EventTask</cfile>
+</library>   
